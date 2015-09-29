@@ -1,0 +1,83 @@
+
+.dsp-logo {
+	background: url(../images/11111.PNG) transparent left top no-repeat;
+	width: 311px;
+	height: 300px;
+	border: 0px solid #cccccc;
+	margin-bottom: 0px;
+}
+
+.dsp-form {
+	margin: 0px;
+	padding: 0px;
+}
+
+.dsp-sysname {
+	margin-top: 0px;
+	font-size: 28px;
+	font-family: Microsoft YaHei, Consolas;
+	/*color: #1E82CC;*/
+	font-weight: bold;
+	height: 80px;
+	background-color: #F89A1E;
+	color: white;
+	width: 315px;
+}
+
+.dsp-login-title {
+	color: #F89A1E; font-size: 24px; font-weight: bold; margin: 10px 0px 20px 0px;
+	font-family: Microsoft YaHei, Consolas;
+}
+
+.dsp-form * {
+	font-family: Microsoft YaHei, Consolas;
+	font-size: 14px;
+}
+
+.dsp-login-input {
+	width: 220px;
+	font-family: Microsoft YaHei, Consolas;
+	font-size: 14px;
+	color: #222222;
+}
+
+.dsp-login-input2 {
+	width: 160px;
+	font-family: Microsoft YaHei, Consolas;
+	font-size: 14px;
+	color: #222222;
+}
+
+.dsp-login-btn {
+	min-width: 6em;
+	height: 2.2em;
+	background-color: #1E82CC;
+	color: white;
+	border: none;
+}
+
+.dsp-deco-empty {
+	color: #999999;
+}
+
+
+.dsp-footer {
+	margin-top: 20px;
+	border-top: 1px solid #cccccc;
+	padding-top: 5px;
+	font-family: Microsoft YaHei, Consolas;
+	font-size: 12px;
+	color: #222222;
+}
+
+.dsp-copy { color: #777777; }
+
+.dsp-error-hint {
+	font-size: 12px; 
+	color: #C85305;
+	font-family: Microsoft YaHei, Consolas;
+}
+
+a { color: #1E82CC; text-decoration: none; }
+a:visited { color: #1E82CC; text-decoration: none }
+

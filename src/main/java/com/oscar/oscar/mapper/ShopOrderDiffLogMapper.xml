@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.ShopOrderDiffLogMapper">
+	<resultMap type="com.oscar.oscar.bean.ShopOrderDiffLogBean" id="log">
+		<result column="id" property="id" />
+		<result column="shop_order_id" property="shopOrderId" />
+		<result column="descripion" property="descripion" />
+		<result column="state" property="state" />
+		<result column="operator" property="operator" />
+		<result column="submit_date" property="submitDate" />
+		<result column="check_date" property="checkDate" />
+	</resultMap>
+	<insert id="addLog" parameterType="com.oscar.oscar.bean.StoreHouseBean">
+	    insert into shop_order_diff_log (shop_order_id,descripion,state,operator,submit_date,check_date) 
+	    values(#{shopOrderId},#{descripion},#{state},#{operator},#{submitDate},#{checkDate})
+	</insert>
+</mapper>

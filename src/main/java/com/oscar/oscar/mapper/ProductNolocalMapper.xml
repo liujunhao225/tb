@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.ProductNolocalMapper">
+	<resultMap type="com.oscar.oscar.bean.ProductNolocalBean" id="product">
+		<result column="product_id" property="productId" />
+		<result column="sh_store_id" property="shStoreId" />
+		<result column="price" property="price" />
+		<result column="total_count" property="totalCount" />
+	</resultMap>
+	<select id="getProductNolocalDesc" resultMap="product">
+		select * from product_nolocal where product_id = #{productId}
+		<if test="shStoreId !=null and shStoreId !=''">
+			and sh_store_id = #{shStoreId}
+		</if>
+	</select>
+	<select id="getNolocalBean" resultMap="product">
+		select * from
+		product_nolocal limit 0,1
+	</select>
+	<update id="updateProductCount">
+		update product_nolocal set
+		total_count = total_count +
+		#{totalCount}
+		where product_id =#{productId} and sh_store_id=
+		#{shStoreId}
+	</update>
+	<select id="getList" resultMap="product">
+		select t1.product_id,t1.price,t1.total_count,t2.sh_name as sh_store_id
+		from
+		product_nolocal t1 left join tb2_storehouse t2 on t1.sh_store_id =
+		t2.sh_id
+		where 1=1
+		<if test="productId !=null and productId !=''">
+			and t1.product_id like CONCAT('%',#{productId},'%')
+		</if>
+		<if test="shStoreId !=null and shStoreId !=''">
+		    and t1.sh_store_id =#{shStoreId}
+		</if>
+	</select>
+	<select id="getListCount" resultType="int">
+		select count(1) from product_nolocal where 1=1
+		<if test="productId !=null and productId !=''">
+			and product_id like CONCAT('%',#{productId},'%')
+		</if>
+		<if test="shStoreId !=null and shStoreId !=''">
+		    and sh_store_id =#{shStoreId}
+		</if>
+	</select>
+	<select id="deleteAllRecord">
+		TRUNCATE product_nolocal
+	</select>
+	<insert id="addnolocalBatch" parameterType="java.util.List">
+		INSERT INTO product_nolocal
+		(product_id,sh_store_id,price,total_count)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.productId},#{item.shStoreId},#{item.price},#{item.totalCount})
+		</foreach>
+	</insert>
+	<select id="getProductNolocalList" resultMap="product">
+		select * from product_nolocal p ,tb2_storehouse s where p.sh_store_id
+		= s.sh_id and p.product_id = #{productId}
+		<if test="shName !=null and shName !=''">
+			and s.sh_name like CONCAT('%',#{shName},'%')
+		</if>
+	</select>
+	<select id="getProductNolocalCount" resultType="int">
+		select count(1) from product_nolocal p ,tb2_storehouse s where
+		p.sh_store_id = s.sh_id and p.product_id = #{productId}
+		<if test="shName !=null and shName !=''">
+			and s.sh_name like CONCAT('%',#{shName},'%')
+		</if>
+	</select>
+	<select id="matchProduct" resultMap="product">
+		select * from
+		product_nolocal where product_id = #{productId} and total_count > 0
+		order by price asc ,total_count desc
+	</select>
+</mapper>

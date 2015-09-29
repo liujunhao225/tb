@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.PurchaseOrderProductStoreMapper">
+	<resultMap type="com.oscar.oscar.bean.PurchaseOrderProductStoreBean" id="date">
+		<result column="order_id" property="orderId" />
+		<result column="product_id" property="productId" />
+		<result column="sh_id" property="shId" />
+		<result column="sh_name" property="shName" />
+		<result column="sh_sub_id" property="shSubId" />
+		<result column="in_num" property="inNum" />
+	</resultMap>
+	<select id="getPurchaseOrderProductStore" resultMap="date">
+		select * from tb2_purchase_order_product_store 
+		where product_id = #{productId} and order_id = #{orderId} and sh_id = #{shId} and sh_sub_id = #{shSubId}
+	</select>
+	<update id="updatePurchaseOrderProductStore">
+		update tb2_purchase_order_product_store set
+		in_num = in_num + #{inNum}
+		where product_id = #{productId} and order_id = #{orderId} and sh_id = #{shId} and sh_sub_id = #{shSubId} and in_num + #{inNum} >= 0
+	</update>
+	<insert id="addPurchaseOrderProductStore" parameterType="java.util.List">
+		INSERT INTO tb2_purchase_order_product_store
+		(order_id,product_id,sh_id,sh_name,sh_sub_id,in_num)
+		VALUES
+		(#{orderId},#{productId},#{shId},#{shName},#{shSubId},#{inNum})
+	</insert>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.CwChangeMapper">
+    
+	<resultMap type="com.oscar.oscar.bean.CwchangeBean" id="cwchangebean">
+		<result column="id" property="id" />
+		<result column="sh_sub_id1" property="shSubId1" />
+		<result column="sh_product_id" property="shProductId" />
+		<result column="sh_product_size" property="shProductSize" />
+		<result column="sh_sub_id2" property="shSubId2" />
+		<result column="writer" property="writer" />
+		<result column="submit_date" property="submitDate" />
+		<result column="deal_date" property="dealDate" />
+	</resultMap>
+	<select id="getChangeList" parameterType="com.oscar.oscar.bean.CwchangeBean" resultMap="cwchangebean">
+	    select * from cwproduct_change where 1=1 
+	    <if test="shProductId !=null and shProductId !=''">
+	        and sh_product_id =#{shProductId}
+	    </if>
+	    <if test="shProductSize !=null and shProductSize !=''">
+	        and sh_product_size=#{shProductSize}
+	    </if>
+	    <if test="state !=null and state !=''">
+	        and state =#{state}
+	    </if>
+	    order by id desc 
+	</select>
+	
+	<select id="getChangeListCount" resultType="int">
+	    select count(id) from cwproduct_change where 1=1 
+	    <if test="shProductId !=null and shProductId !=''">
+	       and sh_product_id =#{shProductId}
+	    </if>
+	    <if test="shProductSize !=null and shProductSize !=''">
+	      and sh_product_size=#{shProductSize}
+	    </if>
+	    <if test="state !=null and state !=''">
+	       and state =#{state}
+	    </if>
+	</select>
+	<insert id="addchangelog" parameterType="com.oscar.oscar.bean.CwchangeBean">
+	    insert into cwproduct_change(sh_sub_id1,sh_product_id,sh_product_size,sh_sub_id2,writer,count) values(#{shSubId1},#{shProductId},
+	    #{shProductSize},#{shSubId2},#{writer},#{count});
+	</insert>
+	<select id="getBeanInfo" resultMap="cwchangebean">
+	    select * from cwproduct_change where id =#{id}
+	</select>
+	<update id="editBean">
+	    update cwproduct_change set state =#{state} where id=#{id}
+	</update>
+	<select id="getCwchangCountByState" resultType="int">
+		SELECT count(*) FROM cwproduct_change where state=#{state}
+	</select>
+</mapper>

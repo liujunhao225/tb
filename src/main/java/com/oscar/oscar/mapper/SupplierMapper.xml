@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.SupplierMapper">
+	<resultMap type="com.oscar.oscar.bean.SupplierBean" id="supplier">
+		<id column="supplier_id" property="supplierId" />
+		<result column="supplier_name" property="supplierName" />
+		<result column="contact_people" property="contactPeople" />
+		<result column="supplier_phone" property="supplierPhone" />
+		<result column="supplier_profile" property="supplierProfile" />
+	</resultMap>
+	<select id="getSupplierList" resultMap="supplier">
+		SELECT * FROM tb2_supplier 
+		<if test="supplierName !=null and supplierName !='' ">
+		   where supplier_name like CONCAT('%',#{supplierName},'%')
+		</if>
+	</select>
+	<select id="getSupplierListCount" resultType="int">
+		SELECT count(1) FROM tb2_supplier 
+		<if test="supplierName !=null and supplierName !='' ">
+		   where supplier_name like CONCAT('%',#{supplierName},'%')
+		</if>
+	</select>
+	<select id="getSupplier" resultType="com.oscar.oscar.bean.SupplierBean">
+		select * from tb2_supplier where supplier_name=#{supplierName}
+	</select>
+	<insert id="addSupplier" parameterType="com.oscar.oscar.bean.SupplierBean">
+	    insert into tb2_supplier (supplier_name,contact_people,supplier_phone,supplier_profile) 
+	    values(#{supplierName},#{contactPeople},#{supplierPhone},#{supplierProfile})
+	</insert>
+	<update id="editSupplier" parameterType="com.oscar.oscar.bean.SupplierBean">
+	    update tb2_supplier set 
+	      <if test="contactPeople !=null and contactPeople !=''">
+	        contact_people =#{contactPeople},
+	    </if>
+	      <if test="supplierPhone !=null and supplierPhone !=''">
+	        supplier_phone =#{supplierPhone},
+	    </if>
+	      <if test="supplierProfile !=null and supplierProfile !=''">
+	        supplier_profile =#{supplierProfile},
+	    </if>
+	    	supplier_name = #{supplierName}
+	    	where supplier_id = #{supplierId}
+	</update>
+	<select id="getSupplierKind" resultMap="supplier">
+		select 	supplier_id,  supplier_name from tb2_supplier
+	</select>
+	<delete id="deleteSupplier" >
+	   	delete from tb2_supplier where supplier_id=#{shopId}
+	</delete>
+	<select id="getSupplierById" resultMap="supplier">
+		select 	* from tb2_supplier where supplier_id = #{supplierId}
+	</select>
+</mapper>

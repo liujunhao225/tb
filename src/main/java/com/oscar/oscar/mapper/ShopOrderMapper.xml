@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.ShopOrderMapper">
+	<resultMap type="com.oscar.oscar.bean.ShopOrderBean" id="shopOrder">
+		<result column="id" property="id" />
+		<result column="order_id" property="orderId" />
+		<result column="shop_name" property="shopName" />
+		<result column="product_code" property="productCode" />
+		<result column="count" property="count" />
+		<result column="size" property="size" />
+		<result column="store_place" property="storePlace" />
+		<result column="is_have_product_flag" property="isHaveProductFlag" />
+		<result column="order_note" property="orderNote" />
+		<result column="express_id" property="expressId" />
+		<result column="order_code" property="orderCode" />
+		<result column="price" property="price" />
+		<result column="state" property="state" />
+		<result column="channel" property="channel" />
+		<result column="islocal" property="isLocal" />
+		<result column="note" property="note" />
+		<result column="freight" property="freight" />
+		<result column="zip_code" property="zipCode" />
+		<result column="address" property="address" />
+		<result column="telephone" property="telephone" />
+		<result column="consignee_name" property="consigneeName" />
+		<result column="delivery_method" property="deliveryMethod" />
+		<result column="time" property="time" />
+		<result column="abnormal_message" property="abnormalMessage" />
+	</resultMap>
+	<select id="getShopOrderList" resultMap="shopOrder">
+		SELECT * FROM shop_order  where (state != '6'or state is null)
+		 <if test="orderId !=null and orderId !=''">
+	       and order_id like CONCAT('%',#{orderId},'%')
+	     </if>
+	     <if test="shopName !=null and shopName !=''">
+	       and shop_name like CONCAT('%',#{shopName},'%')
+	     </if>
+	     <if test="expressId !=null and expressId !=''">
+	       and express_id like CONCAT('%',#{expressId},'%')
+	     </if>
+	     <if test="orderCode !=null and orderCode !=''">
+	       and order_code like CONCAT('%',#{orderCode},'%')
+	     </if>
+	     <if test="state !=null and state !=''">
+	       and state = #{state}
+	     </if>
+	     <if test="isLocal !=null and isLocal !=''">
+	       and islocal =#{isLocal}
+	     </if>
+	     <if test="isHaveProductFlag !=null and isHaveProductFlag !=''">
+	       and is_have_product_flag =#{isHaveProductFlag}
+	     </if>
+	     <if test="time !=null and time !=''">
+	       and time =#{time}
+	     </if>
+	      order by id desc
+	</select>
+	<select id="getShopOrderCount" resultType="int">
+		SELECT count(*) FROM shop_order  where (state != '6'or state is null)
+		  <if test="orderId !=null and orderId !=''">
+	       and order_id like CONCAT('%',#{orderId},'%')
+	     </if>
+	     <if test="shopName !=null and shopName !=''">
+	       and shop_name like CONCAT('%',#{shopName},'%')
+	     </if>
+	     <if test="expressId !=null and expressId !=''">
+	       and express_id like CONCAT('%',#{expressId},'%')
+	     </if>
+	     <if test="orderCode !=null and orderCode !=''">
+	       and order_code like CONCAT('%',#{orderCode},'%')
+	     </if>
+	     <if test="state !=null and state !=''">
+	       and state = #{state}
+	     </if>
+	     <if test="isLocal !=null and isLocal !=''">
+	       and islocal =#{isLocal}
+	     </if>
+	     <if test="isHaveProductFlag !=null and isHaveProductFlag !=''">
+	       and is_have_product_flag =#{isHaveProductFlag}
+	     </if>
+	     <if test="time !=null and time !=''">
+	       and time =#{time}
+	     </if>
+	</select>
+	<select id="getShopOrderDesc" resultMap="shopOrder">
+		SELECT * FROM shop_order  where id = #{id} 
+	</select>
+	<select id="getShopOrderBean" parameterType="com.oscar.oscar.bean.ShopOrderBean" resultMap="shopOrder">
+		select * from shop_order where order_id = #{orderId} and product_code = #{productCode} and size = #{size} and (store_place = #{storePlace} or store_place is null) and state != 6
+	</select>
+	<insert id="saveShopOrder" parameterType="com.oscar.oscar.bean.ShopOrderBean">
+	    insert into shop_order (order_id,shop_name,product_code,count,size,store_place,is_have_product_flag,note,price,order_note,express_id,order_code,state,channel,freight,isLocal,zip_code,address,telephone,consignee_name,delivery_method,time) 
+	    values(#{orderId},#{shopName},#{productCode},#{count},#{size},#{storePlace},#{isHaveProductFlag},#{note},#{price},#{orderNote},#{expressId},#{orderCode},#{state},#{channel},#{freight},#{isLocal},#{zipCode},#{address},#{telephone},#{consigneeName},#{deliveryMethod},#{time})
+	</insert>
+	<update id="updateExpressById" parameterType="com.oscar.oscar.bean.ShopOrderBean">
+	    update shop_order set 
+	    express_id =#{expressId},state = #{state},channel = #{channel},note = #{note},freight = #{freight},zip_code = #{zipCode},address = #{address},telephone = #{telephone},consignee_name = #{consigneeName},delivery_method = #{deliveryMethod}
+	    where id =#{id}
+	</update>
+	<update id="updateExpress" parameterType="com.oscar.oscar.bean.ShopOrderBean">
+		update shop_order set 
+		express_id =#{expressId},state = #{state},channel = #{channel},note = #{note},freight = #{freight},zip_code = #{zipCode},address = #{address},telephone = #{telephone},consignee_name = #{consigneeName},delivery_method = #{deliveryMethod}
+		where order_id = #{orderId} and product_code = #{productCode} and size = #{size} and store_place = #{storePlace} and state != 6
+	</update>
+	<update id="deleteShopOrder">
+	    update shop_order set state = '6',is_have_product_flag = '2', store_place = ''
+	    where id =#{id}
+	</update>
+	<update id="updateShopOrder">
+	    update shop_order
+	    set order_id = #{orderId},shop_name = #{shopName},product_code = #{productCode},count = #{count},size = #{size},store_place = #{storePlace},is_have_product_flag = #{isHaveProductFlag},order_note = #{orderNote},order_code = #{orderCode},price = #{price},time = #{time},state = #{state}
+	    where id =#{id}
+	</update>
+	<update id="updateShopOrderAbnornalState">
+	    update shop_order set state = #{state},abnormal_message = #{abnormalMessage}
+	    where id =#{id}
+	</update>
+	<select id="getShopOrderCountByState" resultType="int" >
+		SELECT count(*) FROM shop_order  where state = #{state} 
+	</select>
+	<select id="downloadShopOrderList" resultMap="shopOrder">
+		SELECT * FROM shop_order  where (state != '6'or state is null) 
+		<if test="time !=null and time !=''">
+	       and time =#{time}
+	     </if>
+	    order by id desc
+	</select>
+</mapper>
