@@ -6,6 +6,11 @@ public class ShopOrderBean {
 	 * 订单号
 	 */
 	private String orderId;
+	
+	/**
+	 * 上传文件 ID
+	 */
+	private long fileId; 
 	/**
 	 * 店铺名称
 	 */
@@ -214,6 +219,12 @@ public class ShopOrderBean {
 	}
 	public void setTime(String time) {
 		this.time = time;
+	}
+	public long getFileId() {
+		return fileId;
+	}
+	public void setFileId(long fileId) {
+		this.fileId = fileId;
 	}
 	
 }

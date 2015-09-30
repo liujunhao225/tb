@@ -18,7 +18,7 @@ public interface ShopOrderMapper {
 	public int updateShopOrder(ShopOrderBean bean);
 	public int updateShopOrderAbnornalState(@Param(value="id")Long id,@Param(value="state")String state,@Param(value="abnormalMessage")String abnormalMessage);
 	public int getShopOrderCountByState(@Param(value="state")String state);
-	public List<ShopOrderBean> downloadShopOrderList(@Param(value="time")String time);
+	public List<ShopOrderBean> downloadShopOrderList(long fileId);
 	public int updateExpress(ShopOrderBean bean);
 	public ShopOrderBean getShopOrderBean(ShopOrderBean bean);
 }

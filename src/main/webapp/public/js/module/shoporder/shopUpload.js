@@ -6,7 +6,7 @@ var SHOPORDER_STORE_URL = "/oscar/shopOrder/getShopOrderUploadList.do";
 var SHOPORDER_UPLAODORDER_URL ="/oscar/shopOrder/uploadShopOrderFile.do";
 var SHOPORDER_MATCH_URL ="/oscar/shopOrder/uploadShopOrder.do";
 var SHOPORDER_DELETE_URL = "/oscar/shopOrder/delShopOrderUploadFile.do";
-var SHOPORDER_DOWNLOAD_URL="/oscar/shopOrder/downloadFile.do"
+var SHOPORDER_DOWNLOAD_URL="/oscar/shopOrder/downLoadShopOrder.do"
 Ext.onReady(function() {
     Ext.QuickTips.init();
 	  

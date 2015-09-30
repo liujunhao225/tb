@@ -5,6 +5,7 @@ package com.oscar.oscar.action;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,6 +66,7 @@ import com.oscar.oscar.service.StoreHouseMapper;
 import com.oscar.oscar.util.FileSaveUtil;
 import com.oscar.oscar.util.FileUploadBean;
 import com.oscar.oscar.util.MD5Utils;
+import com.oscar.oscar.util.OrderFileMakerTool;
 
 @Component
 @Controller
@@ -311,7 +313,6 @@ public class ShopOrderAction {
 		json = matchAndReduceStoreCount(shopOrderBean);
 		String resStatus = json.getString("status");
 		if ("200".equals(resStatus)) {
-
 			try {
 				if(isLocalNum == 0)
 				{
@@ -543,7 +544,7 @@ public class ShopOrderAction {
 		FileInputStream fis = null; 
 		Workbook wb = null;
 		try {
-			String id = request.getParameter("id");
+			String id = request.getParameter("id");//文件 ID
 			ShopOrderUploadBean shopOrderUploadBean = ShopOrderUploadMapper.getShopOrderFileById(id);
 			fis = new FileInputStream(path+shopOrderUploadBean.getFileName());
 			wb = WorkbookFactory.create(fis);
@@ -565,6 +566,7 @@ public class ShopOrderAction {
 					if(row != null)
 					{
 						ShopOrderBean bean = getBeanFromRow(row, ralstionShip);
+						bean.setFileId(Long.parseLong(id));
 						String shopName = bean.getShopName();
 						String orderId = bean.getOrderId();
 						Map<String,List<ShopOrderBean>> shopListMap = shopOrders.get(shopName);
@@ -807,162 +809,27 @@ public class ShopOrderAction {
 	@RequestMapping("/downLoadShopOrder.do")
 	@ResponseBody
 	public String downLoadShopOrder(HttpServletRequest request,HttpServletResponse response) {
-		 
-		String downLoadTime = request.getParameter("downLoadTime");
-        // 第一步，创建一个webbook，对应一个Excel文件  
-		XSSFWorkbook wb = new XSSFWorkbook();  
-        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
-		XSSFSheet sheet = wb.createSheet("订单明细");  
-        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-		XSSFRow row = sheet.createRow((int)0);  
-        // 第四步，创建单元格，并设置值表头 设置表头居中  
-        XSSFCellStyle style = wb.createCellStyle();  
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式  
-  
-        
-        XSSFCell cell = row.createCell(0);  
-        cell.setCellValue("时间");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(1); 
-        cell.setCellValue("订单号");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell(2);  
-        cell.setCellValue("店铺名称");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell(3);  
-        cell.setCellValue("商品编码");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(4);  
-        cell.setCellValue("数量");  
-        cell.setCellStyle(style);  
-  
-        cell = row.createCell(5);  
-        cell.setCellValue("尺码");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(6);  
-        cell.setCellValue("仓位");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(7);  
-        cell.setCellValue("是否有货");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(8);  
-        cell.setCellValue("订单备忘录");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(9);  
-        cell.setCellValue("快递号");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(10);  
-        cell.setCellValue("订单编号");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(11);  
-        cell.setCellValue("价格");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(12);  
-        cell.setCellValue("渠道优化");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(13);  
-        cell.setCellValue("备注");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(14);  
-        cell.setCellValue("运费");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(15);  
-        cell.setCellValue("邮编");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(16);  
-        cell.setCellValue("收货地址");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(17);  
-        cell.setCellValue("联系方式");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(18);  
-        cell.setCellValue("收货人姓名");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(19);  
-        cell.setCellValue("发货方式");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell(20);  
-        cell.setCellValue("仓库类型");  
-        cell.setCellStyle(style);
-        
-        List<ShopOrderBean> list = shopOrderMapper.downloadShopOrderList(downLoadTime);
-  
-        for (int i = 0; i < list.size(); i++)  
-        {  
-            row = sheet.createRow((int) i + 1);  
-            ShopOrderBean order =  list.get(i);  
-            // 第四步，创建单元格，并设置值  
-            row.createCell(0).setCellValue(order.getTime());
-            row.createCell(1).setCellValue(order.getOrderId());  
-            row.createCell(2).setCellValue(order.getShopName());  
-            row.createCell(3).setCellValue(order.getProductCode());  
-            row.createCell(4).setCellValue(order.getCount()+""); 
-            row.createCell(5).setCellValue(order.getSize());
-            row.createCell(6).setCellValue(order.getStorePlace());
-            String ishave = order.getIsHaveProductFlag();
-            ishave = "1".equals(ishave)?"有货":"无货";
-            row.createCell(7).setCellValue(ishave);
-            row.createCell(8).setCellValue(order.getOrderNote());
-            row.createCell(9).setCellValue(order.getExpressId());
-            row.createCell(10).setCellValue(order.getOrderCode());
-            row.createCell(11).setCellValue(order.getPrice());
-            row.createCell(12).setCellValue(order.getChannel());
-            row.createCell(13).setCellValue(order.getNote());
-            row.createCell(14).setCellValue(order.getFreight());
-            row.createCell(15).setCellValue(order.getZipCode());
-            row.createCell(16).setCellValue(order.getAddress());
-            row.createCell(17).setCellValue(order.getTelephone());
-            row.createCell(18).setCellValue(order.getConsigneeName());
-            row.createCell(19).setCellValue(order.getDeliveryMethod());
-            if(order.getIsLocal() != null)
-            {
-            	if(order.getIsLocal() == 0)
-            	{
-            		row.createCell(20).setCellValue("本地库");
-            	}
-            	else
-            	{
-            		row.createCell(20).setCellValue("外地库");
-            	}
-            	
-            }
-            else
-            {
-            	row.createCell(20).setCellValue("");
-            }
-            
-//            cell = row.createCell(order.getCount());  
-//            cell.setCellValue(new SimpleDateFormat("yyyy-mm-dd").format(stu  
-//                    .getBirth()));  
-        }  
-
+		String fileId = request.getParameter("fileId");
         response.reset();  
         response.setContentType("application/msexcel;charset=UTF-8");
+        List<ShopOrderBean> list = shopOrderMapper.downloadShopOrderList(Long.parseLong(fileId));
+        
+        Map<String,ShopOrderBean> map = new HashMap<String, ShopOrderBean>();
+        for(ShopOrderBean bean:list){
+        	map.put(bean.getOrderId(), bean);
+        }
+        
+       ShopOrderUploadBean uploadBean =  ShopOrderUploadMapper.getShopOrderFileById(fileId);
+        
         try  
         {  
+        	OrderFileMakerTool.makeExcel(uploadBean.getFileName(), map);
         	response.addHeader("Content-Disposition", "attachment;filename=\""  
                     + new String(("订单明细表" + ".xlsx").getBytes("GBK"),  
                             "ISO8859_1") + "\"");
         	java.io.OutputStream os = response.getOutputStream();
+        	PrintWriter writer =response.getWriter();
+        	
         	wb.write(os);  
         	os.close();  
         }  
