@@ -2,20 +2,65 @@ package com.oscar.oscar.bean;
 
 public class ShopOrderBean {
 	private Long id;
+	/**
+	 * 订单号
+	 */
 	private String orderId;
+	/**
+	 * 店铺名称
+	 */
 	private String shopName;
+	/**
+	 * 产品号
+	 */
 	private String productCode;
+	/**
+	 * 数量
+	 */
 	private Integer count;
+	/**
+	 * 尺寸
+	 */
 	private String size;
+	/**
+	 * 仓位
+	 */
 	private String storePlace;
+	/**
+	 * 有货标志
+	 */
 	private String isHaveProductFlag;
+	/**
+	 * 订单备忘录
+	 */
 	private String orderNote;
+	/**
+	 * 快递号
+	 */
 	private String expressId;
+	/**
+	 * 订单编号
+	 */
 	private String orderCode;
+	/**
+	 * 价格
+	 */
 	private String price;
+	/**
+	 * 状态
+	 */
 	private String state;
+	/**
+	 * 是否是本地
+	 */
 	private Integer isLocal;
+	/**
+	 * 渠道
+	 */
 	private String channel;
+	/**
+	 * 
+	 */
 	private String note;
 	private String freight;
 	private String zipCode;

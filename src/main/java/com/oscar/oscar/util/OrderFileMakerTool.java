@@ -5,10 +5,8 @@
  */
 package com.oscar.oscar.util;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import java.util.Map;
 
@@ -16,14 +14,9 @@ import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.ClientAnchor;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.oscar.oscar.bean.ShopOrderBean;
@@ -54,20 +47,47 @@ public class OrderFileMakerTool {
 			int maxRowNum = sheet.getLastRowNum();
 			// 取得订单编号的列索引
 			int columnNum = sheet.getRow(0).getLastCellNum();
+
 			int orderIdColumnIndex = 200;
+			int changweiColumnIdex = 200;
+			int changkuColumnIndex = 200;
+			int existColumnIndex = 200;
+
 			Row titleRow = sheet.getRow(0);
 			for (int i = 0; i < columnNum; i++) {
 				titleRow.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
 				String cellValue = titleRow.getCell(i).getStringCellValue();
 				if ("订单编号" == cellValue) {
 					orderIdColumnIndex = i;
-					break;
+				} else if ("仓库类型" == cellValue) {
+					changkuColumnIndex = i;
+				} else if ("仓位" == cellValue) {
+					changweiColumnIdex = i;
+				} else if ("是否有货" == cellValue) {
+					existColumnIndex = i;
 				}
 			}
 			// 获取
-
+			for (int i = 1; i < maxRowNum; i++) {
+				String tempOrderId = sheet.getRow(i)
+						.getCell(orderIdColumnIndex).getStringCellValue();
+				ShopOrderBean temporderBean = map.get(tempOrderId);
+				// 仓库
+				sheet.getRow(i).getCell(changkuColumnIndex)
+						.setCellValue(temporderBean.getChannel());
+				// 仓位
+				sheet.getRow(i).getCell(changweiColumnIdex)
+						.setCellValue(temporderBean.getStorePlace());
+				// 是否有货
+				sheet.getRow(i)
+						.getCell(existColumnIndex)
+						.setCellValue(
+								"1" == temporderBean.getIsHaveProductFlag() ? "有"
+										: "无");
+			}
 			FileOutputStream fileOut = new FileOutputStream(
-					SystemConfig.DOWNLOAD_FILE_PATH + fileName);
+					SystemDictionary.FilePath.DOWNLOAD_FILE_ORDER_PATH
+							+ fileName);
 			workbook.write(fileOut);
 			fileOut.close();
 		} catch (InvalidFormatException e) {
@@ -82,28 +102,9 @@ public class OrderFileMakerTool {
 			e.printStackTrace();
 			return "";
 		} finally {
-			// logger.info("【导出文件】关闭文件");
-			// if (workbook != null)
-			// try {
-			// workbook.close();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-		}
-		return SystemConfig.DOWNLOAD_FILE_PATH + fileName;// 返回excel路径
-	}
 
-	public static void main(String[] args) {
-		System.out.println(makeExcel("测试抓图.xlsx"));
-	}
-
-	private static boolean checkRow(Row row) {
-		try {
-			row.getCell(0).getStringCellValue();
-			return true;
-		} catch (Exception e) {
-			return false;
 		}
+		return SystemDictionary.FilePath.DOWNLOAD_FILE_ORDER_PATH + fileName;
 	}
 
 }
