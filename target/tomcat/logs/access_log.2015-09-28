@@ -1,8 +1,0 @@
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:47 +0800] "GET / HTTP/1.1" 404 - http-bio-8080-exec-1 0
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:47 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-3 0
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:52 +0800] "GET /oscar/login/toIndex.do HTTP/1.1" 200 2508 http-bio-8080-exec-4 536
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:55 +0800] "POST /oscar/login/login.do HTTP/1.1" 200 16 http-bio-8080-exec-7 1005
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:55 +0800] "GET /oscar/login/toIndex.do HTTP/1.1" 200 7592 http-bio-8080-exec-8 181
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:56 +0800] "GET /oscar/shopOrder/getShopOrderAbnormalCount.do?_dc=1443403016134 HTTP/1.1" 200 41 http-bio-8080-exec-9 30
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:56 +0800] "GET /oscar/diff/getPurchaseAbnormalCount.do?_dc=1443403016135 HTTP/1.1" 200 26 http-bio-8080-exec-2 47
-0:0:0:0:0:0:0:1 - - [28/Sep/2015:09:16:56 +0800] "GET /oscar/cwchange/getStoreHouseAbnormalCount.do?_dc=1443403016137 HTTP/1.1" 200 26 http-bio-8080-exec-5 49
