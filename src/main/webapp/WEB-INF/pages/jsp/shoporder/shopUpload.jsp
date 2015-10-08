@@ -12,6 +12,11 @@
 <script type="text/javascript" src="/oscar/public/js/module/shoporder/shopUpload.js"></script>
 <link rel="stylesheet" type="text/css" href="/oscar/public/styles/oscar-main.css" />
 <title>订单管理</title>
+<style type="text/css">
+.x-action-col-icon{
+	margin:0 10px 0 0;
+}
+</style>
 </head>
 <body>
 	<div id="formpanel"></div>

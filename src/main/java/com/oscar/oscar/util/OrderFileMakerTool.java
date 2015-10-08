@@ -5,9 +5,9 @@
  */
 package com.oscar.oscar.util;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.oscar.oscar.bean.ShopOrderBean;
@@ -38,9 +39,7 @@ public class OrderFileMakerTool {
 		logger.info("【导出文件】打开原始文件");
 		Workbook workbook = null;
 		try {
-			workbook = new XSSFWorkbook(
-					OPCPackage
-							.open(SystemDictionary.FilePath.UPLOAD_FILE_ORDER_PATH
+			workbook = WorkbookFactory.create(new File(SystemDictionary.FilePath.UPLOAD_FILE_ORDER_PATH
 									+ fileName));
 			Sheet sheet = workbook.getSheetAt(0);
 			sheet.setDefaultRowHeight((short) 1000);
@@ -51,21 +50,22 @@ public class OrderFileMakerTool {
 			int orderIdColumnIndex = 200;
 			int changweiColumnIdex = 200;
 			int changkuColumnIndex = 200;
-			int existColumnIndex = 200;
+//			int existColumnIndex = 200;
 
 			Row titleRow = sheet.getRow(0);
 			for (int i = 0; i < columnNum; i++) {
 				titleRow.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
 				String cellValue = titleRow.getCell(i).getStringCellValue();
-				if ("订单编号" == cellValue) {
+				if ("订单号".equals(cellValue)) {
 					orderIdColumnIndex = i;
-				} else if ("仓库类型" == cellValue) {
+				} else if ("仓库名称" .equals(cellValue)) {
 					changkuColumnIndex = i;
-				} else if ("仓位" == cellValue) {
+				} else if ("仓库编码".equals(cellValue)) {
 					changweiColumnIdex = i;
-				} else if ("是否有货" == cellValue) {
+				} 
+				/*else if ("是否有货".equals(cellValue)) {
 					existColumnIndex = i;
-				}
+				}*/
 			}
 			// 获取
 			for (int i = 1; i < maxRowNum; i++) {
@@ -79,16 +79,16 @@ public class OrderFileMakerTool {
 				sheet.getRow(i).getCell(changweiColumnIdex)
 						.setCellValue(temporderBean.getStorePlace());
 				// 是否有货
-				sheet.getRow(i)
+				/*sheet.getRow(i)
 						.getCell(existColumnIndex)
 						.setCellValue(
 								"1" == temporderBean.getIsHaveProductFlag() ? "有"
-										: "无");
+										: "无");*/
 			}
 			FileOutputStream fileOut = new FileOutputStream(
 					SystemDictionary.FilePath.DOWNLOAD_FILE_ORDER_PATH
 							+ fileName);
-			workbook.write(fileOut);
+			workbook.write(fileOut);	
 			fileOut.close();
 		} catch (InvalidFormatException e) {
 			logger.error("【导出文件】excel文件格式 不正确");

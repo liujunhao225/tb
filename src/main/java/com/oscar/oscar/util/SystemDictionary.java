@@ -2,26 +2,26 @@ package com.oscar.oscar.util;
 
 public class SystemDictionary {
 
-	public static class FilePath{
-		
+	public static class FilePath {
+
 		/**
 		 * 
 		 * 订单上传路径
 		 */
-		//FIXME 修改文件路径
-		public static final String UPLOAD_FILE_ORDER_PATH="";
-		
+		// FIXME 修改文件路径
+		// public static final String UPLOAD_FILE_ORDER_PATH="d:\\";
+		public static final String UPLOAD_FILE_ORDER_PATH = "/home/tb_file/upload";
+
 		/**
-		 *  生成订单存放路径 
+		 * 生成订单存放路径
 		 */
-		//FIXME 修改文件路径
-		public static final String DOWNLOAD_FILE_ORDER_PATH="";
-	
-		
-		
-		
+		// FIXME 修改文件路径
+		// public static final String
+		// DOWNLOAD_FILE_ORDER_PATH="d:\\tb_download\\";
+		public static final String DOWNLOAD_FILE_ORDER_PATH = "/home/tb_file/download";
+
 	}
-	
+
 	/**
 	 * 采购单状态
 	 * 
@@ -57,7 +57,7 @@ public class SystemDictionary {
 		 * 审核状态
 		 */
 		public static String REVIEW = "G";//
-		
+
 	}
 
 }

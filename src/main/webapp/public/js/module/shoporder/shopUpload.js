@@ -3,32 +3,36 @@
  */
 var PAGE_SIZE = 15;
 var SHOPORDER_STORE_URL = "/oscar/shopOrder/getShopOrderUploadList.do";
-var SHOPORDER_UPLAODORDER_URL ="/oscar/shopOrder/uploadShopOrderFile.do";
-var SHOPORDER_MATCH_URL ="/oscar/shopOrder/uploadShopOrder.do";
+var SHOPORDER_UPLAODORDER_URL = "/oscar/shopOrder/uploadShopOrderFile.do";
+var SHOPORDER_MATCH_URL = "/oscar/shopOrder/uploadShopOrder.do";
 var SHOPORDER_DELETE_URL = "/oscar/shopOrder/delShopOrderUploadFile.do";
-var SHOPORDER_DOWNLOAD_URL="/oscar/shopOrder/downLoadShopOrder.do"
+var SHOPORDER_DOWNLOAD_URL = "/oscar/shopOrder/downLoadShopOrder.do";
+var SHOPORDER_MAKE_DOWNLOAD_URL="/oscar/shopOrder/makefile.do";
 Ext.onReady(function() {
     Ext.QuickTips.init();
-	  
-	function exportButtonClick (){  
-	     window.location.href = SHOPORDER_DOWNLOAD_URL;  
-	}
-	Ext.define('shopUpload', {
-		extend : 'Ext.data.Model',
-		fields : [{
-			name : 'id',
-			type : 'string'
-		}, {
-			name : 'uploadeTime',
-			type : 'string'
-		}, {
-			name : 'fileName',
-			type : 'string'
-		}, {
-			name : 'isMath',
-			type : 'string'
-		}]
-	});
+
+    function exportButtonClick() {
+        window.location.href = SHOPORDER_DOWNLOAD_URL;
+    }
+    Ext.define('shopUpload', {
+        extend: 'Ext.data.Model',
+        fields: [{
+            name: 'id',
+            type: 'string'
+        },
+        {
+            name: 'uploadeTime',
+            type: 'string'
+        },
+        {
+            name: 'fileName',
+            type: 'string'
+        },
+        {
+            name: 'isMath',
+            type: 'string'
+        }]
+    });
     var shopOrderStore = Ext.create('Ext.data.Store', {
         model: 'shopUpload',
         pageSize: PAGE_SIZE,
@@ -61,20 +65,20 @@ Ext.onReady(function() {
                 height: 100,
                 width: 340,
                 items: [{
-        			xtype : 'textfield',
-        			fieldLabel:'<span style="color:red;">*</span> 文&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件',
-        			inputType:'file',
-        			id : 'auploadUrl',
-        			name : 'file',
-        			itemId:'auploadUrl',
-        			labelWidth:80,
-        			labelAlign:'right',
-        			width:280,
-        			style:'padding-top:3px;',
-        			anchor : '95%',
-        			buttonText:'选择文件',
-        			allowBlank : false,
-              		blankText:'不能为空'
+                    xtype: 'textfield',
+                    fieldLabel: '<span style="color:red;">*</span> 文&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件',
+                    inputType: 'file',
+                    id: 'auploadUrl',
+                    name: 'file',
+                    itemId: 'auploadUrl',
+                    labelWidth: 80,
+                    labelAlign: 'right',
+                    width: 280,
+                    style: 'padding-top:3px;',
+                    anchor: '95%',
+                    buttonText: '选择文件',
+                    allowBlank: false,
+                    blankText: '不能为空'
                 }]
             },
             buttons: [{
@@ -83,48 +87,45 @@ Ext.onReady(function() {
                 icon: '/oscar/public/images/common/success.png',
                 iconAlign: 'right',
                 handler: function() {
-					var formCmp=Ext.getCmp('form3');
-					var form=formCmp.getForm();
-					if(form.isValid()){
-						var $file =$('#form3:visible input[type=file]');
-						var filePath = $file.val();
-						form.submit(
-								{
-									url:SHOPORDER_UPLAOD_URL,
-									success:function(form,action){
-										if(action.success){
-											if(action.result.status == 200)
-											{
-												Ext.Msg.alert('操作提示',"导入信息成功！",function(){
-													uploadWin.close();
-													shopOrderStore.load();
-												});	
-											}
-											else
-											{
-												Ext.Msg.alert('操作提示',action.result.mess,function(){
-												});
-											}
-											
-										}else{
-											Ext.Msg.alert('操作提示',action.result.mess,function(){
-											});
-										}
-									},
-									failure:function(form,action){
-										Ext.Msg.alert('操作提示',"导入信息失败！",function(){
-										});
-									}
-								});
-					}
-				}
+                    var formCmp = Ext.getCmp('form3');
+                    var form = formCmp.getForm();
+                    if (form.isValid()) {
+                        var $file = $('#form3:visible input[type=file]');
+                        var filePath = $file.val();
+                        form.submit({
+                            url: SHOPORDER_UPLAODORDER_URL,
+                            success: function(form, action) {
+                                if (action.success) {
+                                    if (action.result.status == 200) {
+                                        Ext.Msg.alert('操作提示', "导入信息成功！",
+                                        function() {
+                                            uploadWin.close();
+                                            shopOrderStore.load();
+                                        });
+                                    } else {
+                                        Ext.Msg.alert('操作提示', action.result.mess,
+                                        function() {});
+                                    }
+
+                                } else {
+                                    Ext.Msg.alert('操作提示', action.result.mess,
+                                    function() {});
+                                }
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert('操作提示', "导入信息失败！",
+                                function() {});
+                            }
+                        });
+                    }
+                }
             },
             {
                 text: '取消',
                 icon: '/oscar/public/images/common/undo.png',
                 iconAlign: 'right',
                 handler: function() {
-                	uploadWin.close();
+                    uploadWin.close();
                 }
             }],
             buttonAlign: 'center'
@@ -137,7 +138,7 @@ Ext.onReady(function() {
         store: shopOrderStore,
         title: '订单导入管理',
         region: 'south',
-        autoHeight:true,
+        autoHeight: true,
         forceFit: 1,
         viewConfig: {
             emptyText: '&nbsp;&nbsp;没有相关的记录'
@@ -145,15 +146,26 @@ Ext.onReady(function() {
         columns: [{
             dataIndex: 'id',
             hidden: true
-        },{
+        },
+        {
             text: '文件名称',
             dataIndex: 'fileName',
-        },{
-        	text:'是否匹配',
-        	dataIndex:'isMath'
-        },{
-        	text:'上传时间',
-        	dataIndex:'uploadeTime'
+        },
+        {
+            text: '是否匹配',
+            dataIndex: 'isMath',
+            renderer: function(val, meta, record) {
+            	var tempdata = record.data.isMatch;
+            	if(tempdata=='1'){
+            		return "未匹配";
+            	}else{
+            		return '已匹配';
+            	}
+            }
+        },
+        {
+            text: '上传时间',
+            dataIndex: 'uploadeTime'
         },
         {
             header: '操作',
@@ -172,12 +184,12 @@ Ext.onReady(function() {
                             Ext.Ajax.request({
                                 url: SHOPORDER_DELETE_URL,
                                 params: {
-                                	id: model.data.id
+                                    id: model.data.id
                                 },
                                 success: function(response) {
                                     var text = Ext.decode(response.responseText);
                                     if (text.success == true) {
-                                        Ext.Msg.alert('操作提示:',  '删除成功！',
+                                        Ext.Msg.alert('操作提示:', '删除成功！',
                                         function() {
                                             _store.loadPage(_store.currentPage);
                                         });
@@ -194,90 +206,109 @@ Ext.onReady(function() {
                 }
             },
             {
-
                 icon: '/oscar/public/images/common/start.gif',
                 tooltip: '开始匹配',
+                margin: '0 10 0 0',
                 handler: function(grid, rowIndex, colIndex) {
                     Ext.Msg.confirm('操作提示', '是否要匹配订单？',
-                            function(btn) {
-                                if (btn == "yes") {
-                                    var _store = grid.getStore();
-                                    var model = grid.getStore().getAt(rowIndex);
-                                    Ext.Ajax.request({
-                                        url: SHOPORDER_MATCH_URL,
-                                        params: {
-                                        	id: model.data.id
-                                        },
-                                        success: function(response) {
-                                            var action = Ext.decode(response.responseText);
-    										if(action.success){
-    											if(action.status == 200)
-    											{
-    												Ext.Msg.alert('操作提示',"导入信息成功！",function(){
-    													uploadWin.close();
-    													shopOrderStore.load();
-    												});	
-    											}
-    											else
-    											{
-    												Ext.Msg.alert('操作提示',action.mess,function(){
-    												});
-    											}
-    											
-    										}else{
-    											Ext.Msg.alert('操作提示',action.mess,function(){
-    											});
-    										}
-                                        },
-                                        failure: function() {
-                                            Ext.Msg.alert('操作提示', "匹配失败！");
+                    function(btn) {
+                        if (btn == "yes") {
+                            var _store = grid.getStore();
+                            var model = grid.getStore().getAt(rowIndex);
+                            Ext.Ajax.request({
+                                url: SHOPORDER_MATCH_URL,
+                                params: {
+                                    id: model.data.id
+                                },
+                                success: function(response) {
+                                    var action = Ext.decode(response.responseText);
+                                    if (action.success) {
+                                        if (action.status == 200) {
+                                            Ext.Msg.alert('操作提示', "导入信息成功！",
+                                            function() {
+                                                uploadWin.close();
+                                                shopOrderStore.load();
+                                            });
+                                        } else {
+                                            Ext.Msg.alert('操作提示', action.mess,
+                                            function() {});
                                         }
-                                    });
+
+                                    } else {
+                                        Ext.Msg.alert('操作提示', action.mess,
+                                        function() {});
+                                    }
+                                },
+                                failure: function() {
+                                    Ext.Msg.alert('操作提示', "匹配失败！");
                                 }
                             });
                         }
-            },{
+                    });
+                }
+            },
+            {
+                icon: '/oscar/public/images/common/makefile.png',
+                tooltip: '生成下载文件',
+                margin: '0 10 0 0',
+                handler: function(grid, rowIndex, colIndex) {
+                    var _store = grid.getStore();
+                    var model = grid.getStore().getAt(rowIndex);
+                    Ext.Ajax.request({
+                        url: SHOPORDER_MAKE_DOWNLOAD_URL,
+                        params: {
+                            id: model.data.id
+                        },
+                        success: function(response) {
+                            var action = Ext.decode(response.responseText);
+                            console.log("result:"+action);
+                            if (action.success) {
+                                if (action.status == 200) {
+                                    Ext.Msg.alert('操作提示', "已生成文件，可下载！",
+                                    function() {
+                                        shopOrderStore.load();
+                                    });
+                                } else {
+                                    Ext.Msg.alert('操作提示', '生成文件失败!',
+                                    function() {});
+                                }
+
+                            } else {
+                                Ext.Msg.alert('操作提示', '生成文件失败!',
+                                function() {});
+                            }
+                        },
+                        failure: function() {
+                            Ext.Msg.alert('操作提示', "生成文件失败！");
+                        }
+                    });
+                    //here is ending
+                }
+            },
+            {
                 icon: '/oscar/public/images/common/t_download.png',
                 tooltip: '下载',
+                margin: '0 10 0 0',
                 handler: function(grid, rowIndex, colIndex) {
                     Ext.Msg.confirm('操作提示', '是否要匹配订单？',
-                            function(btn) {
-                                if (btn == "yes") {
-                                    var _store = grid.getStore();
-                                    var model = grid.getStore().getAt(rowIndex);
-                                    Ext.Ajax.request({
-                                        url: SHOPORDER_MATCH_URL,
-                                        params: {
-                                        	id: model.data.id
-                                        },
-                                        success: function(response) {
-                                            var action = Ext.decode(response.responseText);
-    										if(action.success){
-    											if(action.status == 200)
-    											{
-    												Ext.Msg.alert('操作提示',"导入信息成功！",function(){
-    													uploadWin.close();
-    													shopOrderStore.load();
-    												});	
-    											}
-    											else
-    											{
-    												Ext.Msg.alert('操作提示',action.mess,function(){
-    												});
-    											}
-    											
-    										}else{
-    											Ext.Msg.alert('操作提示',action.mess,function(){
-    											});
-    										}
-                                        },
-                                        failure: function() {
-                                            Ext.Msg.alert('操作提示', "匹配失败！");
-                                        }
-                                    });
+                    function(btn) {
+                        if (btn == "yes") {
+                            var _store = grid.getStore();
+                            var model = grid.getStore().getAt(rowIndex);
+                            Ext.Ajax.request({
+                                url: SHOPORDER_MATCH_URL,
+                                params: {
+                                    id: model.data.id
+                                },
+                                success: function(response) {
+                                },
+                                failure: function() {
+                                    Ext.Msg.alert('操作提示', "匹配失败！");
                                 }
                             });
                         }
+                    });
+                }
             }]
         }],
         dockedItems: [{
@@ -298,43 +329,44 @@ Ext.onReady(function() {
         {
             xtype: 'toolbar',
             dock: 'top',
-            items: [
-                    '文件名称：',
-                    {
-                    	xtype:'textfield',
-                    	id:'fileName',
-                    	width:80
-                    },
-                    {
-                    	xtype:'button',
-                    	text:'查询',
-                    	icon:'/oscar/public/images/common/icon_searchd.gif',
-                    	listeners:{
-                    		click:function(){
-                    			if(shopOrderStore){
-                    				var proxy=shopOrderStore.getProxy();
-                    				proxy.setExtraParam('fileName',Ext.getCmp('fileName').getValue());
-                    				shopOrderStore.load({
-                    					params:{start:0,limit:PAGE_SIZE}
-                    				});
-                    			}
-                    		}
-                    	}
-                    },
-            '->', {
-                    	xtype: 'button',
-                        text: '导入',
-                        icon: '/oscar/public/images/common/excel-up.png',
-                        handler: function() {
-                            if (uploadWin) {
-                            	uploadWin.show();
-                            } else {
-                            	uploadWin = creatUploadWin();
-                            	uploadWin.show();
-                            }
+            items: ['文件名称：', {
+                xtype: 'textfield',
+                id: 'fileName',
+                width: 80
+            },
+            {
+                xtype: 'button',
+                text: '查询',
+                icon: '/oscar/public/images/common/icon_searchd.gif',
+                listeners: {
+                    click: function() {
+                        if (shopOrderStore) {
+                            var proxy = shopOrderStore.getProxy();
+                            proxy.setExtraParam('fileName', Ext.getCmp('fileName').getValue());
+                            shopOrderStore.load({
+                                params: {
+                                    start: 0,
+                                    limit: PAGE_SIZE
+                                }
+                            });
                         }
-                    }],
+                    }
+                }
+            },
+            '->', {
+                xtype: 'button',
+                text: '导入',
+                icon: '/oscar/public/images/common/excel-up.png',
+                handler: function() {
+                    if (uploadWin) {
+                        uploadWin.show();
+                    } else {
+                        uploadWin = creatUploadWin();
+                        uploadWin.show();
+                    }
+                }
+            }],
         }]
-       
+
     });
 });

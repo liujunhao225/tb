@@ -54,8 +54,8 @@
 	     <if test="isHaveProductFlag !=null and isHaveProductFlag !=''">
 	       and is_have_product_flag =#{isHaveProductFlag}
 	     </if>
-	     <if test="time !=null and time !=''">
-	       and time =#{time}
+	     <if test="f_file_id !=null and f_file_id !=''">
+	       and file_id =#{f_file_id}
 	     </if>
 	      order by id desc
 	</select>
@@ -82,8 +82,8 @@
 	     <if test="isHaveProductFlag !=null and isHaveProductFlag !=''">
 	       and is_have_product_flag =#{isHaveProductFlag}
 	     </if>
-	     <if test="time !=null and time !=''">
-	       and time =#{time}
+	     <if test="f_file_id !=null and f_file_id !=''">
+	       and file_id =#{f_file_id}
 	     </if>
 	</select>
 	<select id="getShopOrderDesc" resultMap="shopOrder">
@@ -124,9 +124,7 @@
 	</select>
 	<select id="downloadShopOrderList" resultMap="shopOrder">
 		SELECT * FROM shop_order  where (state != '6'or state is null) 
-		<if test="time !=null and time !=''">
 	       and file_id =#{fileId}
-	     </if>
 	    order by id desc
 	</select>
 </mapper>

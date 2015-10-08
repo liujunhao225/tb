@@ -833,6 +833,31 @@ Ext.onReady(function() {
         });
     }
     
+    
+    Ext.define("filemodel", {
+        extend: "Ext.data.Model",
+        fields: [{
+            name: "file_id",
+            type: "string"
+        },
+        {
+            name: "file_name",
+            type: "string"
+        }]
+    });
+    var filemodelstore = Ext.create("Ext.data.Store", {
+        model: "filemodel",
+        proxy: {
+            type: "ajax",
+            url: "/oscar/shopOrder/filelist.do",
+            reader: {
+                type: "json",
+                root: "data"
+            }
+        },
+        autoLoad: false
+    });
+    
     grid = Ext.create('Ext.grid.Panel', {
         renderTo: 'gridpanel',
         width: Ext.getBody().getWidth(),
@@ -1009,11 +1034,15 @@ Ext.onReady(function() {
             xtype: 'toolbar',
             dock: 'top',
             items: [
-                    '时间标记：',
+                    '导入文件名：',
                     {
-                    	xtype:'textfield',
-                    	id:'time',
-                    	width:80
+                    	xtype:'combobox',
+                    	id:'f_file_id',
+                    	width:220,
+                    	valueField:'file_id',
+                    	displayField:'file_name',
+                    	store:filemodelstore,
+                    	editables:false
                     },
                     '订单号：',
                     {
@@ -1086,7 +1115,8 @@ Ext.onReady(function() {
                     		click:function(){
                     			if(shopOrderStore){
                     				var proxy=shopOrderStore.getProxy();
-                    				proxy.setExtraParam('time',Ext.getCmp('time').getValue());
+                    				console.log("文件id:"+Ext.getCmp('f_file_id').getValue());
+                    				proxy.setExtraParam('f_file_id',Ext.getCmp('f_file_id').getValue());
                     				proxy.setExtraParam('orderId',Ext.getCmp('orderId').getValue());
                     				proxy.setExtraParam('shopName',Ext.getCmp('shopName').getValue());
                     				proxy.setExtraParam('isHaveProductFlag',Ext.getCmp('isHaveProductFlag').getValue());
@@ -1099,42 +1129,43 @@ Ext.onReady(function() {
                     		}
                     	}
                     },
-            '->', {
-                    	xtype: 'button',
-                        text: '导出',
-                        icon: '/oscar/public/images/common/excel-up.png',
-                        handler: function() {
-                        	if(!downloadWin)
-                        	{
-                        		downloadWin = creatdownloadWin();
-                        	}
-                        	downloadWin.show();
-                        }
-                    }, {
-                    	xtype: 'button',
-                        text: '导入',
-                        icon: '/oscar/public/images/common/excel-up.png',
-                        handler: function() {
-                            if (uploadWin) {
-                            	uploadWin.show();
-                            } else {
-                            	uploadWin = creatUploadWin();
-                            	uploadWin.show();
-                            }
-                        }
-                    }, {
-                    	xtype: 'button',
-                    	text: '新增',
-                    	icon: '/oscar/public/images/common/add.png',
-                    	handler: function() {
-                    		if (addWin) {
-                    			addWin.show();
-                    		} else {
-                    			addWin = createAddWin();
-                    			addWin.show();
-                    		}
-                    	}
-            }],
+//            '->', {
+//                    	xtype: 'button',
+//                        text: '导出',
+//                        icon: '/oscar/public/images/common/excel-up.png',
+//                        handler: function() {
+//                        	if(!downloadWin)
+//                        	{
+//                        		downloadWin = creatdownloadWin();
+//                        	}
+//                        	downloadWin.show();
+//                        }
+//                    }, {
+//                    	xtype: 'button',
+//                        text: '导入',
+//                        icon: '/oscar/public/images/common/excel-up.png',
+//                        handler: function() {
+//                            if (uploadWin) {
+//                            	uploadWin.show();
+//                            } else {
+//                            	uploadWin = creatUploadWin();
+//                            	uploadWin.show();
+//                            }
+//                        }
+//                    }, {
+//                    	xtype: 'button',
+//                    	text: '新增',
+//                    	icon: '/oscar/public/images/common/add.png',
+//                    	handler: function() {
+//                    		if (addWin) {
+//                    			addWin.show();
+//                    		} else {
+//                    			addWin = createAddWin();
+//                    			addWin.show();
+//                    		}
+//                    	}
+//            }
+            ],
         }]
        
     });

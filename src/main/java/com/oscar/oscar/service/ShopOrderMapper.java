@@ -9,8 +9,8 @@ import com.oscar.oscar.bean.ShopOrderBean;
 
 public interface ShopOrderMapper {
 	
-	public List<ShopOrderBean> getShopOrderList(@Param(value="orderId")String orderId,@Param(value="shopName")String shopName,@Param(value="isLocal")String isLocal,@Param(value="state")String state,@Param(value="expressId")String expressId,@Param(value="orderCode")String orderCode,@Param(value="isHaveProductFlag")String isHaveProductFlag,@Param(value="time")String time,RowBounds rowbounds);
-	public int getShopOrderCount(@Param(value="orderId")String orderId,@Param(value="shopName")String shopName,@Param(value="isLocal")String isLocal,@Param(value="state")String state,@Param(value="expressId")String expressId,@Param(value="orderCode")String orderCode,@Param(value="isHaveProductFlag")String isHaveProductFlag,@Param(value="time")String time);
+	public List<ShopOrderBean> getShopOrderList(@Param(value="orderId")String orderId,@Param(value="shopName")String shopName,@Param(value="isLocal")String isLocal,@Param(value="state")String state,@Param(value="expressId")String expressId,@Param(value="orderCode")String orderCode,@Param(value="isHaveProductFlag")String isHaveProductFlag,@Param(value="f_file_id")String f_file_id,RowBounds rowbounds);
+	public int getShopOrderCount(@Param(value="orderId")String orderId,@Param(value="shopName")String shopName,@Param(value="isLocal")String isLocal,@Param(value="state")String state,@Param(value="expressId")String expressId,@Param(value="orderCode")String orderCode,@Param(value="isHaveProductFlag")String isHaveProductFlag,@Param(value="f_file_id")String f_file_id);
 	public int saveShopOrder(ShopOrderBean shopOrder);
 	public int updateExpressById(ShopOrderBean bean);
 	public int deleteShopOrder(@Param(value="id")Long id);
