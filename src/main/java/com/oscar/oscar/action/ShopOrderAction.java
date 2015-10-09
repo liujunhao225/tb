@@ -841,37 +841,41 @@ public class ShopOrderAction {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	@RequestMapping("/downLoadShopOrder.do")
 	@ResponseBody
-	public String downLoadShopOrder(HttpServletRequest request,
+	public String  downLoadShopOrder(HttpServletRequest request,
 			HttpServletResponse response) {
-		String fileId = request.getParameter("fileId");
+		String fileId = request.getParameter("id");
 		ShopOrderUploadBean uploadBean = ShopOrderUploadMapper
 				.getShopOrderFileById(fileId);
 
 		response.reset();
 		response.setContentType("application/msexcel;charset=UTF-8");
+//		response.setContentType("application/octet-stream");
 		try {
 			String filePath = SystemDictionary.FilePath.DOWNLOAD_FILE_ORDER_PATH
 					+ uploadBean.getFileName();
 			response.addHeader("Content-Disposition", "attachment;filename=\""
-					+ new String(("订单明细表" + ".xlsx").getBytes("UTF-8"),
+					+ new String(uploadBean.getFileName().getBytes("gbk"),
 							"ISO8859_1") + "\"");
+			
 			java.io.OutputStream os = response.getOutputStream();
 			InputStream in = null;
 			in = new FileInputStream(filePath);
+			response.addHeader("Content-Length", "" + in.available());
 			int len = 0;
 			byte[] buffer = new byte[1024];
-			while ((len = in.read(buffer)) > 0) {
+			while ((len = in.read(buffer)) >= 0) {
 				os.write(buffer, 0, len);
 			}
-			// writer.write(os);
+			 
+			os.flush();
 			os.close();
+			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return "";
 	}
 
 	private Map<String, List<ShProductBean>> dealData(List<ShProductBean> list) {

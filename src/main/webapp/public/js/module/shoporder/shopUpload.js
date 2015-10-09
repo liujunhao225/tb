@@ -290,24 +290,21 @@ Ext.onReady(function() {
                 tooltip: '下载',
                 margin: '0 10 0 0',
                 handler: function(grid, rowIndex, colIndex) {
-                    Ext.Msg.confirm('操作提示', '是否要匹配订单？',
-                    function(btn) {
-                        if (btn == "yes") {
-                            var _store = grid.getStore();
-                            var model = grid.getStore().getAt(rowIndex);
-                            Ext.Ajax.request({
-                                url: SHOPORDER_MATCH_URL,
-                                params: {
-                                    id: model.data.id
-                                },
-                                success: function(response) {
-                                },
-                                failure: function() {
-                                    Ext.Msg.alert('操作提示', "匹配失败！");
-                                }
-                            });
-                        }
-                    });
+                	var model = grid.getStore().getAt(rowIndex);
+                	 window.location.href=SHOPORDER_DOWNLOAD_URL+"?id="+model.data.id;
+//                            var _store = grid.getStore();
+//                            var model = grid.getStore().getAt(rowIndex);
+//                            Ext.Ajax.request({
+//                                url: SHOPORDER_DOWNLOAD_URL,
+//                                params: {
+//                                    id: model.data.id
+//                                },
+//                                success: function(response) {
+//                                },
+//                                failure: function() {
+//                                    Ext.Msg.alert('操作提示', "匹配失败！");
+//                                }
+//                    });
                 }
             }]
         }],

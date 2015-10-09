@@ -16,9 +16,9 @@ public class SystemDictionary {
 		 * 生成订单存放路径
 		 */
 		// FIXME 修改文件路径
-		// public static final String
-		// DOWNLOAD_FILE_ORDER_PATH="d:\\tb_download\\";
-		public static final String DOWNLOAD_FILE_ORDER_PATH = "/home/tb_file/download";
+		 public static final String
+		 DOWNLOAD_FILE_ORDER_PATH="d:\\tb_download\\";
+//		public static final String DOWNLOAD_FILE_ORDER_PATH = "/home/tb_file/download";
 
 	}
 
