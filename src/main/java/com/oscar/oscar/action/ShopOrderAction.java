@@ -819,7 +819,7 @@ public class ShopOrderAction {
 
 		Map<String, ShopOrderBean> map = new HashMap<String, ShopOrderBean>();
 		for (ShopOrderBean bean : list) {
-			map.put(bean.getOrderId(), bean);
+			map.put(bean.getOrderCode(), bean);
 		}
 
 		ShopOrderUploadBean uploadBean = ShopOrderUploadMapper

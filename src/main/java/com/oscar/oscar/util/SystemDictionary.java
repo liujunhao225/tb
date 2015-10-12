@@ -9,8 +9,8 @@ public class SystemDictionary {
 		 * 订单上传路径
 		 */
 		// FIXME 修改文件路径
-		// public static final String UPLOAD_FILE_ORDER_PATH="d:\\";
-		public static final String UPLOAD_FILE_ORDER_PATH = "/home/tb_file/upload";
+		 public static final String UPLOAD_FILE_ORDER_PATH="d:\\";
+//		public static final String UPLOAD_FILE_ORDER_PATH = "/home/tb_file/upload";
 
 		/**
 		 * 生成订单存放路径
