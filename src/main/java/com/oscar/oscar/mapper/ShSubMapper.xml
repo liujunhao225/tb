@@ -54,12 +54,12 @@
 		delete from tb_sh_sub where sh_id =#{shId}
 	</delete>
 	<select id="getallsubshbyshid" resultMap="shSub">
-		select sh_sub_id,capacity ,used_total from tb_sh_sub where sh_id =#{shId} order by id desc;
+		select sh_sub_id,capacity ,used_total from tb_sh_sub where sh_id =#{shId} order by id desc
 	</select>
 	<update id="updatetotalused">
 	    update tb_sh_sub set used_total=used_total+#{usedTotal} where sh_sub_id=#{shSubId}
 	</update>
 	<select id="getallsubshnotsubId" resultMap="shSub">
-	    select sh_sub_id,capacity ,used_total from tb_sh_sub where sh_id =#{shId} and sh_sub_id !=#{shSubId}
+	    select sh_sub_id,capacity ,used_total from tb_sh_sub 
 	</select>
 </mapper>

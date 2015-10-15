@@ -24,6 +24,7 @@ public interface ShProductMapper {
 	public void deleteProduct(ShProductBean bean);
 	public ShProductBean getproductstorehouse(ShProductBean bean);
 	public List<ShProductBean> getShProductBean(@Param(value="productId")String productId , @Param(value="productSize")String productSize,@Param(value="shSubId")String shSubId);
+	public List<ShProductBean> getShProductBeanByShSubId(@Param(value="shSubId")String shSubId);
 	/**
 	 * 
 	 * @param productId
@@ -50,4 +51,13 @@ public interface ShProductMapper {
 	public void deleteAllRecord();
 	
 	public int batchAdd(List<ShProductBean> list);
+	
+	
+	public int subShProductCountManage(ShProductBean bean);
+	
+	public ShProductBean getproductstorehousebaseproductCode(ShProductBean bean);
+	
+	public int updatestorehouseBaseProductCode(ShProductBean bean);
+	
+	public int deleteProductBaseProductcode(ShProductBean bean);
 }

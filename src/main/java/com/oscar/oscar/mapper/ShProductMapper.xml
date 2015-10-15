@@ -30,6 +30,20 @@
 		where product_id = #{productId}
 		and product_size= #{productSize} and sh_sub_id = #{shSubId}
 	</update>
+	<update id="updatestorehouseBaseProductCode" parameterType="com.oscar.oscar.bean.ShProductBean">
+		update tb2_sh_product set count = count+(#{count})
+		<if test="state !=null and state !=''">
+			,state = #{state}
+		</if>
+		where product_code=#{productCode} and sh_sub_id = #{shSubId}
+	</update>
+	
+	<!-- 库存盘点使用 -->
+	<update id="subShProductCountManage" parameterType="com.oscar.oscar.bean.ShProductBean">
+		update tb2_sh_product set count = #{count}
+		where product_code = #{productCode} and sh_sub_id = #{shSubId}
+	</update>
+	
 	<select id="getproductstorehouse" parameterType="com.oscar.oscar.bean.ShProductBean"
 		resultMap="shProduct">
 		select * from
@@ -46,6 +60,9 @@
 		<if test="shSubId !=null and shSubId !=''">
 			and sh_sub_id = #{shSubId}
 		</if>
+	</select>
+	<select id="getShProductBeanByShSubId" resultMap="shProduct">
+		SELECT * FROM tb2_sh_product where state = 'A' and sh_sub_id = #{shSubId}
 	</select>
 	<select id="getShProductDesc" resultMap="shProduct">
 		SELECT * FROM
@@ -117,6 +134,9 @@
 		delete from tb2_sh_product where product_id = #{productId}
 		and product_size= #{productSize} and sh_sub_id = #{shSubId}
 	</delete>
+	<delete id="deleteProductBaseProductcode" parameterType="com.oscar.oscar.bean.ShProductBean">
+		delete from tb2_sh_product where product_code=#{productCode} and sh_sub_id = #{shSubId}
+	</delete>
 	<select id="getShProductBeanList" resultMap="shProduct">
 		select p.* from tb2_sh_product p,tb2_storehouse s where p.sh_id =
 		s.sh_id and p.product_id=#{productId} and p.product_size =
@@ -161,5 +181,12 @@
 		</foreach>
 
 	</insert>
+	
+	<select id="getproductstorehousebaseproductCode" parameterType="com.oscar.oscar.bean.ShProductBean"
+		resultMap="shProduct">
+		select * from
+		tb2_sh_product where product_code=#{productCode}
+		and sh_sub_id = #{shSubId}
+	</select>
 
 </mapper>

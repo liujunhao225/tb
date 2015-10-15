@@ -396,7 +396,6 @@ Ext.onReady(function() {
     });
     
     //采购单商品查看--新增加采购单商品
- 
     var rowEditing2 = Ext.create('Ext.grid.plugin.RowEditing', {
         clicksToMoveEditor: 1,
         autoCancel: false,
@@ -782,7 +781,6 @@ Ext.onReady(function() {
 					}
                 },
                 handler: function(grid, rowIndex, colIndex) {
-                	
                     var _store = grid.getStore();
                     var model = grid.getStore().getAt(rowIndex);
                     if (!proStorwin) {

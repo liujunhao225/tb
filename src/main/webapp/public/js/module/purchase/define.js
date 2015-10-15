@@ -44,6 +44,8 @@ Ext.define('purchaseOrder', {
 		type:'string'
 	}]
 });
+
+
 Ext.define("purchaseProductModel",{
 	extend:'Ext.data.Model',
 	fields:[

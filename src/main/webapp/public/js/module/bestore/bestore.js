@@ -825,36 +825,6 @@ Ext.onReady(function() {
                 	var query = {shId:shId,shSubId:shSubId}
                 	console.log("dateArray = "+dateArray);
                 	storage(query,dateArray,0);
-//                	var selections = grid.getSelectionModel().getSelection();
-//                	console.log(selections.length);
-//                	if(!selections||selections.length <= 0)
-//                	{
-//                		Ext.Msg.alert('操作提示','请至少选择一条记录');
-//                		return;
-//                	}
-//                	var dateObj = {};
-//                	var maxIndex = 0;
-//                	var minIndex = 0;
-//                	for(var i=0;i<selections.length;i++)
-//                	{
-//                		var record = selections[i];
-//                		var index = record.index;
-//                		var inNum = record.get('inNum');
-//                		if(!/^[1-9][0-9]*$/.test(inNum))
-//                		{
-//                			Ext.Msg.alert('操作提示','第'+(index+1)+'行数量必须为大于0的整数');
-//                			return;
-//                		}
-//                		dateObj[index]= record;
-//                		if(maxIndex < index)
-//                		{
-//                			maxIndex = index;
-//                		}
-//                		if(minIndex > index)
-//                		{
-//                			minIndex = index;
-//                		}
-//                	}
                 }
             }],
         }]

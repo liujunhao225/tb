@@ -19,3 +19,45 @@ Ext.define('shSub', {
 		type:'string'
 	}]
 });
+//仓位商品
+Ext.define("cwproductmodel",{
+	extend:'Ext.data.Model',
+	fields:[{
+		name:'shSubId',
+		type:'string'
+	},
+	{
+		name:'productCode',
+		type:'string'
+	},
+	{
+		name:'shId',
+		type:'string',
+	},
+	{
+		name:'count',
+		type:'string'
+	},{
+		name:'reallycount',
+		type:'string'
+	},{
+		name:'dsubShid',
+		type:'string'
+	}
+	]
+});
+
+//仓位信息
+Ext.define('changweimodel', {
+    extend: 'Ext.data.Model',
+    fields: [{
+        name: 'id',
+        type: 'string'
+    },{
+    	name:'shSubId',
+    	type:'string'
+    }
+   ]
+});
+
+

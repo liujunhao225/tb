@@ -6,6 +6,9 @@ var SHSUB_STORE_URL = "/oscar/shSub/getshSubList.do";
 var SHSUB_SAVE_URL = "/oscar/shSub/shSubSave.do";
 var SHSUB_UPDATE_URL = "/oscar/shSub/shSubUpdate.do";
 var SHSUB_DELETE_URL = "/oscar/shSub/shSubDelete.do";
+var SHSUB_PRODUCT_LIST_URL="/oscar/shSub/shsubProduct.do";
+var SHSUB_PRODUCT_COUNT_UPDATE_URL="/oscar/shSub/countupdate.do";
+var SHSUB_TRANSFER_URL="/oscar/shSub/transfer.do";
 Ext.onReady(function() {
     Ext.QuickTips.init();
     var shSubStore = Ext.create('Ext.data.Store', {
@@ -55,6 +58,22 @@ Ext.onReady(function() {
         },
         autoLoad: true
     });
+
+    //仓位store
+    var changeweistore = Ext.create('Ext.data.Store', {
+        model: 'changweimodel',
+        proxy: {
+            type: 'ajax',
+            url: '/oscar/shSub/changeweiinfo.do',
+            reader: {
+                type: 'json',
+                root: 'data'
+            }
+        },
+        mode:'local',
+        autoLoad: true
+    });
+    
     var addWin = null;
     // 增加仓位form
     var addForm = [
@@ -171,9 +190,9 @@ Ext.onReady(function() {
                     {
                         fieldLabel: '<span style="color:red;">*</span> 仓位唯一标示',
                         xtype: 'textfield',
-                        itemId: 'eshSubId',
-                        id: 'eshSubId',
-                        name:'shSubId',
+                        itemId: 'sshsubid',
+                        id: 'sshsubid',
+                        name:'sshsubid',
                         style: 'padding-top:3px;',
                         labelWidth: 100,
                         labelAlign: 'right',
@@ -186,62 +205,29 @@ Ext.onReady(function() {
                         readOnly:true
                     },
                     {
-                        fieldLabel: '<span style="color:red;">*</span> 所属仓库名称',
+                        fieldLabel: '<span style="color:red;">*</span> 转移仓位',
                         xtype: 'combobox',
-                        itemId: 'eshId',
-                        id: 'eshId',
-                        name:'shId',
+                        itemId: 'dshsubid',
+                        id: 'dshsubid',
+                        name:'dshsubid',
                         style: 'padding-top:3px;',
                         labelWidth: 100,
                         labelAlign: 'right',
                         allowBlank : false,
                   		blankText:'不能为空',
                         width: 300,
-                    	store:houseStore,
+                    	store:changeweistore,
                     	emptyText:'请选择',
-                    	mode:'local',
+                    	queryMode: 'local',
                     	typeAhead: true,
-                    	valueField:'shId',
-                    	displayField:'shName'
+                    	displayField: 'shSubId',
+    	                valueField: 'shSubId',
                     }
-//                    {
-//                        fieldLabel: '<span style="color:red;">*</span>仓位容量',
-//                        xtype: 'textfield',
-//                        itemId: 'ecapacity',
-//                        id: 'ecapacity',
-//                        name:'capacity',
-//                        style: 'padding-top:3px;',
-//                        labelWidth: 100,
-//                        labelAlign: 'right',
-//                        width: 300,
-//                        regex: /^[0-9]{0,6}$/i,
-//                  		regexText : "只能输入6位以内数字",
-//                        allowBlank : false,
-//                  		blankText:'仓位容量不能为空',
-//                        emptyText:'仓位容量'
-//                    },
-//                    {
-//
-//                        fieldLabel: '<span style="color:red;">*</span>已使用的数量',
-//                        xtype: 'textfield',
-//                        itemId: 'eusedTotal',
-//                        id: 'eusedTotal',
-//                        name:'usedTotal',
-//                        style: 'padding-top:3px;',
-//                        labelWidth: 100,
-//                        labelAlign: 'right',
-//                        width: 300,
-//                        regex: /^[0-9]{0,6}$/i,
-//                  		regexText : "只能输入6位以内数字",
-//                        allowBlank : false,
-//                  		blankText:'已使用的数量不能为空',
-//                        emptyText:'已使用的数量'
-//                    }
                     ];
 
     var createEditWin = function() {
         return Ext.create('Ext.window.Window', {
-            title: '修改仓库',
+            title: '转移仓库',
             height: 230,
             width: 350,
             closeAction: 'hide',
@@ -264,29 +250,10 @@ Ext.onReady(function() {
                     var form = formCmp.getForm();
                     if (form.isValid()) {
                     	form.submit({
-                            url: SHSUB_UPDATE_URL,
+                            url: SHSUB_TRANSFER_URL,
                             success: function(form, action) {
-                                if (action.success) {
-                               	 if(action.result.status == 200)
-                               	{
-                               		 Ext.Msg.alert('操作提示', "修改仓位成功！",
-                                                function() {
-                                                    shSubStore.load();
-                                                    editWin.close();
-                                                }); 
-                               	}
-                               	 else
-                               	{
-                               		 Ext.Msg.alert('操作提示', action.result.mess,
-                                                function() {
-                                                });	 
-                               	}
-                                    
-                                } else {
-                                    Ext.Msg.alert('操作提示', '修改仓位失败！',
-                                    function() {
-                                    });
-                                }
+                            	Ext.Msg.alert("提示","已成功转移！");
+                            	editWin.close();
                             },
                             failure: function(form, action) {
                                 Ext.Msg.alert('操作提示', "修改仓位失败！",
@@ -329,14 +296,6 @@ Ext.onReady(function() {
             text: '所在仓库名称',
             dataIndex: 'shName'
         },
-//        {
-//            text: '仓位容量',
-//            dataIndex: 'capacity'
-//        },
-//        {
-//            text: '已使用的数量',
-//            dataIndex: 'usedTotal'
-//        },
         {
             header: '操作',
             menuDisabled: true,
@@ -386,10 +345,7 @@ Ext.onReady(function() {
                     }
                     houseStore.load();
                     var editForm = editWin.getComponent('form2');
-                    editForm.getComponent('eshSubId').setValue(model.data.shSubId);
-                    editForm.getComponent("eshId").setValue(model.data.shId);
-//                    editForm.getComponent('ecapacity').setValue(model.data.capacity);
-//                    editForm.getComponent('eusedTotal').setValue(model.data.usedTotal);
+                    editForm.getComponent('sshsubid').setValue(model.data.shSubId);
                     editWin.show();
                 }
             }]
@@ -415,9 +371,13 @@ Ext.onReady(function() {
             items: [
                     '仓位唯一标示：',
                     {
-                    	xtype:'textfield',
-                    	id:'shSubId',
-                    	width:120
+    	                	id:'shSubId',
+    	                	width:120,
+    	                	xtype:'combobox',
+        	                store:  changeweistore,
+        	                queryMode: 'local',
+        	                displayField: 'shSubId',
+        	                valueField: 'shSubId',
                     },
                     {
                     	xtype:'button',
@@ -452,4 +412,152 @@ Ext.onReady(function() {
         }]
        
     });
+    //
+   
+    var creatProStoreWin = function (){
+        return Ext.create('Ext.window.Window', {
+            title: '商品信息展示',
+            height: $(window).height()*0.8,
+            width: Ext.getBody().getWidth()*0.8,
+            closeAction: 'hide',
+            modal: true,
+            items: [cwProductgrid]
+        });
+    
+    };
+    
+  
+    //仓位商品
+    var cwproductstore = Ext.create('Ext.data.Store', {
+        model: 'cwproductmodel',
+        pageSize: PAGE_SIZE,
+        proxy: {
+            type: 'ajax',
+            url: SHSUB_PRODUCT_LIST_URL,
+            reader: {
+                type: 'json',
+                root: 'datalist',
+                totalProperty: 'totalRecords'
+            }
+        },
+    	autoLoad:true,
+    });
+    
+    var proStorwin=null;
+    function queryfromrow( grid,record,item,rowIndex,rowIndex){
+    		console.log("window show");
+    	  if (!proStorwin) {
+          	proStorwin = creatProStoreWin();
+          }
+          var proxy = cwproductstore .getProxy();
+          proxy.setExtraParam('shsubid',record.data.shSubId);
+          cwproductstore .load({
+          params: {
+              start: 0,
+              limit: PAGE_SIZE,
+          }});
+          proStorwin.show();
+    }
+    
+    var rowEditing2 = Ext.create('Ext.grid.plugin.RowEditing', {
+        clicksToMoveEditor: 1,
+        autoCancel: false,
+        saveBtnText  : '保存',
+        cancelBtnText: '取消',
+        listeners:{
+        	edit: function(editor, ctx, eOpts) {
+               var tempcount = ctx.record.data.reallycount;
+               var desshid = ctx.record.data.dsubShid;
+               var shSubId= ctx.record.data.shSubId;
+               var productcode = ctx.record.data.productCode;
+               if(tempcount=='' && desshid==''){
+            	   console.log("both null");
+            	   return ;
+               }else if(tempcount !='' && desshid !='' ){
+            	   console.log("both not null");
+            	   return ;
+               }
+                Ext.Ajax.request({
+                    url: SHSUB_PRODUCT_COUNT_UPDATE_URL,
+                    params: { 
+                    	count:tempcount,
+                    	shSubId:shSubId,
+                    	productCode:productcode,
+                    	desshid:desshid
+                    }
+                });
+            },
+            canceledit:function(rowEditing, context) {
+                if (context.record.phantom) {
+                    context.store.remove(context.record);
+                }
+            }
+        }
+    });
+    
+   var cwProductgrid = Ext.create('Ext.grid.Panel', {
+    	        store: cwproductstore ,
+    	        region: 'south',
+    	        autoHeight:false,
+    	        forceFit: 1,
+    	        height:400,
+    	        viewConfig: {
+    	            emptyText: '&nbsp;&nbsp;没有相关的记录'	
+    	        },
+    	        plugins: [rowEditing2],
+    	      
+    	        columns: [
+    	         {
+    	        	 text:'',
+    	        	 dataIndex:'shSubId',
+    	        	 hidden:true
+    	         }
+    	         ,
+    	        {
+    	            text: '货品编码',
+    	            dataIndex: 'productCode'
+    	        },{
+    	            text: '所在仓库',
+    	            dataIndex: 'shId',
+    	        },{
+    	        	text:'库存数量',
+    	        	dataIndex:'count'
+    	        },{
+    	        	text:'实际数量',
+    	        	dataIndex:'reallycount',
+    	        	editor:{
+    	        		allowBlank:true
+    	        	}
+    	        },{
+    	        	text:'仓位变更',
+    	        	dataIndex:'dsubShid',
+    	        	editor:{
+    	        		xtype:'combobox',
+    	                store:  changeweistore,
+    	                queryMode: 'local',
+    	                displayField: 'shSubId',
+    	                valueField: 'shSubId',
+    	        	}
+    	        }
+    	        ],	
+    	        dockedItems: [{
+    	            dock: 'bottom',
+    	            xtype: 'pagingtoolbar',
+    	            store: cwproductstore ,
+    	            displayInfo: true,
+    	            refreshText: '刷新',
+    	            firstText: '第一页',
+    	            prevText: '上一页',
+    	            nextText: '下一页',
+    	            lastText: '尾页',
+    	            beforePageText: '跳转到第',
+    	            afterPageText: '页,共{0}页',
+    	            displayMsg: '第{0} - {1}条记录,共 {2}条记录',
+    	            emptyMsg: '没有记录'
+    	        }
+    	        ]
+
+    	    });
+    	 
+    	 grid.addListener("itemdblclick",queryfromrow);
 });
