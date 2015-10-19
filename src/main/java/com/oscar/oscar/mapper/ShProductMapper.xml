@@ -73,7 +73,7 @@
 	<update id="updateshProductBeanForCount">
 		update tb2_sh_product set
 		count = count + #{count}
-		where product_id =#{productId} and sh_sub_id = #{shSubId} 
+		where product_id =#{productId} and sh_sub_id = #{shSubId}  and product_size=#{productSize}
 	</update>
 	<select id="getallshproduct" resultMap="shProduct">
 		select t1.product_id,t1.product_code
