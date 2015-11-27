@@ -29,6 +29,10 @@
 		<if test=" productCode !=null and productCode !='' ">
 		    and t.product_code like CONCAT('%',#{productCode},'%')
 		</if>
+		<if test=" barCode !=null and barCode !='' ">
+		    and t.bar_code =#{barCode}
+		</if>
+		
 	</select>
 	<select id="getProductListCount" parameterType="com.oscar.oscar.bean.ProductInfoBean" resultType="int">
 		SELECT count(1) FROM tb2_product_info t WHERE 1=1 
@@ -40,6 +44,9 @@
 		</if>
 		<if test=" productName !=null and productName !='' ">
 		    and t.product_name like CONCAT('%',#{productName},'%')
+		</if>
+		<if test=" barCode !=null and barCode !='' ">
+		    and t.bar_code =#{barCode}
 		</if>
 	</select>
 	<insert id="addproduct" parameterType="com.oscar.oscar.bean.ProductInfoBean" useGeneratedKeys="true" keyProperty="id">

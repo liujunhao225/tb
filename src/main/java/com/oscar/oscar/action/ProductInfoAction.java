@@ -62,11 +62,14 @@ public class ProductInfoAction {
 		String productSize = request.getParameter("productSize");
 		String productName = request.getParameter("productName");
 		String productCode = request.getParameter("productCode");
+		String productBarCode =request.getParameter("productBarCode");
+		
 		ProductInfoBean productbean = new ProductInfoBean();
 		productbean.setProductId(productId);
 		productbean.setProductSize(productSize);
 		productbean.setProductName(productName);
 		productbean.setProductCode(productCode);
+		productbean.setBarCode(productBarCode);
 		String start = request.getParameter("page");
 		String limit = request.getParameter("limit");
 		int startNum = 0;

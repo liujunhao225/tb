@@ -826,7 +826,25 @@ Ext.onReady(function() {
             dock: 'top',
             items: [
                     '商品条码',{
-                    	xtype:'textfield',id:'product_bar_code',width:120
+                    	xtype:'textfield',id:'product_bar_code',width:120,
+                    	listeners:{
+                    		'specialkey':function (field,e){
+                    			if (e.getKey() == e.ENTER) {
+                                    console.log("enter key download");
+                                    if(productStore){
+        								var proxy = productStore.getProxy();
+        								console.log(Ext.getCmp('product_bar_code').getValue());
+        								proxy.setExtraParam('productBarCode',Ext.getCmp('product_bar_code').getValue());
+        								productStore .load({
+        									params:{
+        										start:0,
+        										limit:PAGE_SIZE
+        									}
+        								});
+        							}
+                                }
+                    		}
+                    	}
                     },
                     '商品编码',{
                     	xtype:'textfield',id:'productCode',width:120
