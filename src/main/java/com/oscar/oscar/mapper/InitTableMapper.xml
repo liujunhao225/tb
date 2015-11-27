@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "./mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oscar.oscar.service.InitTableMapper">
+	<resultMap type="com.oscar.oscar.bean.InitBean" id="initBean">
+		<id column="id" property="id" />
+		<result column="table_name" property="teName" />
+		<result column="table_chinese_name" property="tcName" />
+		<result column="is_can_init" property="initFlag" />
+	</resultMap>
+	<select id="getInitList" parameterType="com.oscar.oscar.bean.InitBean"
+		resultMap="initBean">
+		select id,table_name,table_chinese_name,is_can_init from tb2_sys_init
+	</select>
+	<select id="getTableName" resultMap="initBean" parameterType="com.oscar.oscar.bean.InitBean">
+	    select  table_name from tb2_sys_init where id =#{id}
+	</select>
+	<delete id="clearTable" parameterType="com.oscar.oscar.bean.InitBean" >
+		TRUNCATE table ${teName}    
+	</delete>
+</mapper>

@@ -825,6 +825,9 @@ Ext.onReady(function() {
             xtype: 'toolbar',
             dock: 'top',
             items: [
+                    '商品条码',{
+                    	xtype:'textfield',id:'product_bar_code',width:120
+                    },
                     '商品编码',{
                     	xtype:'textfield',id:'productCode',width:120
                     },

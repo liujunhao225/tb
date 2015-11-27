@@ -69,6 +69,7 @@
 					class="dsp-action">仓库信息管理</a></li>
 				<li><a href="#goto:/oscar/shSub/index.do" class="dsp-action">仓位信息管理</a></li>
 				<li><a href="#goto:/oscar/product/index.do" class="dsp-action">商品信息管理</a></li>
+				<li><a href="#goto:/oscar/sys_init/index.do" class="dsp-action">系统信息初始化</a></li>
 			</ul>
 		</div>
 	</div>
