@@ -6,6 +6,7 @@ var PRODUCT_STORE_URL = "/oscar/product/list.do";
 var PRODUCT_SAVE_URL = "/oscar/product/add.do";
 var PRODUCT_UPDATE_URL = "/oscar/product/update.do";
 var PRODUCT_DELETE_URL = "/oscar/product/delete.do";
+var PRODUCT_UPLOAD_URL="/oscar/product/upload.do";
 var PRODUCT_PRODUCTSTORELIAT_URL = "/oscar/product/getProductStoreList.do";
 var PRODUCT_PROPUCHORDERLIST_URL = "/oscar/product/proPuchOrderlist.do";
 Ext.onReady(function() {
@@ -414,6 +415,7 @@ Ext.onReady(function() {
             }
         }
     });
+    var uploadWin;
     var proStorGride = Ext.create('Ext.grid.Panel', {
         store: proStorStore ,
         region: 'south',
@@ -874,7 +876,19 @@ Ext.onReady(function() {
     						}
     					}
     				},
-            '->', {
+            '->',{
+            	xtype: 'button',
+                text: '导入',
+                icon: '/oscar/public/images/common/excel-up.png',
+                handler: function() {
+                    if (uploadWin) {
+                    	uploadWin.show();
+                    } else {
+                    	uploadWin = creatUploadWin();
+                    	uploadWin.show();
+                    }
+                }
+            }, {
                 xtype: 'button',
                 text: '新增',
                 icon: '/oscar/public/images/common/add.png',
@@ -890,4 +904,85 @@ Ext.onReady(function() {
         }]
 
     });
+
+    var creatUploadWin = function() {
+        return Ext.create('Ext.window.Window', {
+            title: '导入商品信息',
+            height: 350,
+            width: 350,
+            closeAction: 'hide',
+            modal: true,
+            items: {
+                id: 'form3',
+                xtype: 'form',
+                bodyPadding: 5,
+                height: 300,
+                width: 340,
+                items: [{
+        			xtype : 'textfield',
+        			fieldLabel:'<span style="color:red;">*</span> 文件',
+        			inputType:'file',
+        			id : 'auploadUrl',
+        			name : 'file',
+        			itemId:'auploadUrl',
+        			labelWidth:80,
+        			style: 'padding-top:3px;',
+        			labelAlign:'right',
+        			width:300,
+        			style:'padding-top:3px;',
+        			anchor : '95%',
+        			buttonText:'选择文件',
+        			allowBlank : false,
+              		blankText:'不能为空'
+                }]
+        
+            },
+            buttons: [{
+                text: '确定',
+                formBind: true,
+                icon: '/oscar/public/images/common/success.png',
+                iconAlign: 'right',
+                handler: function() {
+					var formCmp=Ext.getCmp('form3');
+					var form=formCmp.getForm();
+					if(form.isValid()){
+						var $file =$('#form3:visible input[type=file]');
+						var filePath = $file.val();
+						if(!(/.(xlsx)$/i.test(filePath)))
+						{
+							Ext.Msg.alert('操作提示','请选择excle2007文件');
+							return;
+						}
+						file_size = $file[0].files[0].size;
+						if(file_size > 1024*1000*20)
+						{
+							Ext.Msg.alert('操作提示','文件大小需在20M以内');
+							return;
+						}
+						form.submit(
+								{
+									url:PRODUCT_UPLOAD_URL,
+									success:function(form,action){
+												Ext.Msg.alert('操作提示',"导入成功");	
+									},
+									failure:function(form,action){
+										Ext.Msg.alert('操作提示',"导入信息失败！",function(){
+										});
+									}
+								});
+					}
+				}
+            },
+            {
+                text: '取消',
+                icon: '/oscar/public/images/common/undo.png',
+                iconAlign: 'right',
+                handler: function() {
+                	uploadWin.close();
+                }
+            }],
+            buttonAlign: 'center'
+        });
+    }
+    
 });

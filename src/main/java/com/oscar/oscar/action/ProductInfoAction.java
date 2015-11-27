@@ -31,6 +31,9 @@ import com.oscar.oscar.service.PurchaseOrderMapper;
 import com.oscar.oscar.service.ShProductMapper;
 import com.oscar.oscar.service.StoreHouseMapper;
 import com.oscar.oscar.service.SupplierMapper;
+import com.oscar.oscar.util.ExcelToProductInfoTool;
+import com.oscar.oscar.util.FileSaveUtil;
+import com.oscar.oscar.util.FileUploadBean;
 
 @RequestMapping("/product")
 @Component
@@ -62,8 +65,8 @@ public class ProductInfoAction {
 		String productSize = request.getParameter("productSize");
 		String productName = request.getParameter("productName");
 		String productCode = request.getParameter("productCode");
-		String productBarCode =request.getParameter("productBarCode");
-		
+		String productBarCode = request.getParameter("productBarCode");
+
 		ProductInfoBean productbean = new ProductInfoBean();
 		productbean.setProductId(productId);
 		productbean.setProductSize(productSize);
@@ -105,12 +108,12 @@ public class ProductInfoAction {
 		String season = request.getParameter("season");
 		String ingrowth = request.getParameter("ingrowth");
 		JSONObject job = new JSONObject();
-		ProductInfoBean bean = productInfoMapper.getProductInfoByBarCode(barCode);
-		if(bean == null)
-		{
-			bean = productInfoMapper.getProductInfoByCodeAndSize(productId, productSize);
-			if(bean == null)
-			{
+		ProductInfoBean bean = productInfoMapper
+				.getProductInfoByBarCode(barCode);
+		if (bean == null) {
+			bean = productInfoMapper.getProductInfoByCodeAndSize(productId,
+					productSize);
+			if (bean == null) {
 				bean = new ProductInfoBean();
 				bean.setProductId(productId);
 				bean.setProductCode(productCode);
@@ -126,27 +129,21 @@ public class ProductInfoAction {
 
 				if (result == 1) {
 					job.put("success", true);
+				} else {
+					job.put("success", false);
 				}
-				else
-				{
-					job.put("success", false);	
-				}	
-			}
-			else
-			{
-				job.put("success", true);	
+			} else {
+				job.put("success", true);
 				job.put("recode", 1);
-				job.put("desc", "货号和尺码必须唯一，新增商品失败！");	
+				job.put("desc", "货号和尺码必须唯一，新增商品失败！");
 			}
-			
-		}
-		else
-		{
-			job.put("success", true);	
+
+		} else {
+			job.put("success", true);
 			job.put("recode", 1);
-			job.put("desc", "条形码重复,新增商品失败！");	
+			job.put("desc", "条形码重复,新增商品失败！");
 		}
-		return job.toString();	
+		return job.toString();
 	}
 
 	@RequestMapping("/update.do")
@@ -164,12 +161,12 @@ public class ProductInfoAction {
 		String ingrowth = request.getParameter("ingrowth");
 		long idnum = Long.parseLong(id);
 		JSONObject job = new JSONObject();
-		ProductInfoBean bean = productInfoMapper.getProductInfoByBarCode(barCode);
-		if(bean == null||idnum == bean.getId())
-		{
-			bean = productInfoMapper.getProductInfoByCodeAndSize(productId, productSize);
-			if(bean == null||idnum == bean.getId())
-			{
+		ProductInfoBean bean = productInfoMapper
+				.getProductInfoByBarCode(barCode);
+		if (bean == null || idnum == bean.getId()) {
+			bean = productInfoMapper.getProductInfoByCodeAndSize(productId,
+					productSize);
+			if (bean == null || idnum == bean.getId()) {
 				bean = new ProductInfoBean();
 				bean.setId(idnum);
 				bean.setProductId(productId);
@@ -186,27 +183,21 @@ public class ProductInfoAction {
 
 				if (result == 1) {
 					job.put("success", true);
+				} else {
+					job.put("success", false);
 				}
-				else
-				{
-					job.put("success", false);	
-				}	
-			}
-			else
-			{
-				job.put("success", true);	
+			} else {
+				job.put("success", true);
 				job.put("recode", 1);
-				job.put("desc", "货号和尺码必须唯一，修改商品失败！");	
+				job.put("desc", "货号和尺码必须唯一，修改商品失败！");
 			}
-			
-		}
-		else
-		{
-			job.put("success", true);	
+
+		} else {
+			job.put("success", true);
 			job.put("recode", 1);
-			job.put("desc", "条形码重复,修改商品失败！");	
+			job.put("desc", "条形码重复,修改商品失败！");
 		}
-		return job.toString();	
+		return job.toString();
 	}
 
 	@RequestMapping("/delete.do")
@@ -225,7 +216,7 @@ public class ProductInfoAction {
 		job.put("success", true);
 		return job.toString();
 	}
-	
+
 	@RequestMapping("/getProductStoreList.do")
 	@ResponseBody
 	public String getProductStoreList(HttpServletRequest request) {
@@ -233,9 +224,8 @@ public class ProductInfoAction {
 		String shName = request.getParameter("shName");
 		String shSubId = request.getParameter("shSubId");
 		String type = request.getParameter("type");
-		if(type == null)
-		{
-			type = "2";	
+		if (type == null) {
+			type = "2";
 		}
 		long idnum = Long.parseLong(id);
 		String start = request.getParameter("page");
@@ -251,48 +241,49 @@ public class ProductInfoAction {
 		}
 		ProductInfoBean bean = productInfoMapper.getProductInfoById(idnum);
 		JSONObject job = new JSONObject();
-		if(bean != null)
-		{
+		if (bean != null) {
 			String productId = bean.getProductId();
 			String size = bean.getProductSize();
-			if("2".equals(type))
-			{
-				List<ShProductBean> shProductList = shProductMapper.getShProductBeanList(productId, size,shName,shSubId, new RowBounds(startNum, limitNum));
-				int totalCount = shProductMapper.getShProductBeanCount(productId, size,shName,shSubId);
-				if(shProductList != null&&!shProductList.isEmpty())
-				{
+			if ("2".equals(type)) {
+				List<ShProductBean> shProductList = shProductMapper
+						.getShProductBeanList(productId, size, shName, shSubId,
+								new RowBounds(startNum, limitNum));
+				int totalCount = shProductMapper.getShProductBeanCount(
+						productId, size, shName, shSubId);
+				if (shProductList != null && !shProductList.isEmpty()) {
 					JSONArray dataList = new JSONArray();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 					for (ShProductBean shProductBean : shProductList) {
 						String shId = shProductBean.getShId();
-						StoreHouseBean storeHouse = storeHouseMapper.getStoreHouseBeanById(shId);
+						StoreHouseBean storeHouse = storeHouseMapper
+								.getStoreHouseBeanById(shId);
 						JSONObject data = new JSONObject();
 						data.put("shName", storeHouse.getShName());
 						data.put("shSubId", shProductBean.getShSubId());
 						data.put("count", shProductBean.getCount());
 						data.put("state", shProductBean.getState());
 						Date date = shProductBean.getTime();
-						if(date != null)
-						{
-							data.put("time", sdf.format(date));	
+						if (date != null) {
+							data.put("time", sdf.format(date));
 						}
 						dataList.put(data);
 					}
 					job.put("datalist", dataList);
-					job.put("totalRecords", totalCount);	
+					job.put("totalRecords", totalCount);
 				}
-			}
-			else
-			{
-				List<ProductNolocalBean> list = productNoLocalMapper.getProductNolocalList(productId+"-"+size, shName, new RowBounds(startNum, limitNum));
-				int totalCount = productNoLocalMapper.getProductNolocalCount(productId+"-"+size, shName);
-				if(list != null&&!list.isEmpty())
-				{
+			} else {
+				List<ProductNolocalBean> list = productNoLocalMapper
+						.getProductNolocalList(productId + "-" + size, shName,
+								new RowBounds(startNum, limitNum));
+				int totalCount = productNoLocalMapper.getProductNolocalCount(
+						productId + "-" + size, shName);
+				if (list != null && !list.isEmpty()) {
 					JSONArray dataList = new JSONArray();
 					for (ProductNolocalBean productNolocalBean : list) {
 
 						String shId = productNolocalBean.getShStoreId();
-						StoreHouseBean storeHouse = storeHouseMapper.getStoreHouseBeanById(shId);
+						StoreHouseBean storeHouse = storeHouseMapper
+								.getStoreHouseBeanById(shId);
 						JSONObject data = new JSONObject();
 						data.put("shName", storeHouse.getShName());
 						data.put("count", productNolocalBean.getTotalCount());
@@ -300,14 +291,14 @@ public class ProductInfoAction {
 						dataList.put(data);
 					}
 					job.put("datalist", dataList);
-					job.put("totalRecords", totalCount);	
+					job.put("totalRecords", totalCount);
 				}
 			}
 		}
 		System.out.println(job.toString());
 		return job.toString();
 	}
-	
+
 	@RequestMapping("/proPuchOrderlist.do")
 	@ResponseBody
 	public String proPuchOrderList(HttpServletRequest request) {
@@ -325,16 +316,19 @@ public class ProductInfoAction {
 			startNum = 0;
 			limitNum = 20;
 		}
-		List<PurchaseOrderBean> list =purchaseOrderMapper.getOrderListByProductId(idnum, orderId, new RowBounds(startNum, limitNum));
-		int count = purchaseOrderMapper.getOrderListCountByProductId(idnum, orderId);
+		List<PurchaseOrderBean> list = purchaseOrderMapper
+				.getOrderListByProductId(idnum, orderId, new RowBounds(
+						startNum, limitNum));
+		int count = purchaseOrderMapper.getOrderListCountByProductId(idnum,
+				orderId);
 		JSONObject job = new JSONObject();
-		if(list !=null &&!list.isEmpty())
-		{
-			
+		if (list != null && !list.isEmpty()) {
+
 			JSONArray dataList = new JSONArray();
 			for (PurchaseOrderBean purchaseOrderBean : list) {
-				String supplierId =  purchaseOrderBean.getSupplierId();
-				SupplierBean supplier = supplierMapper.getSupplierById(supplierId);
+				String supplierId = purchaseOrderBean.getSupplierId();
+				SupplierBean supplier = supplierMapper
+						.getSupplierById(supplierId);
 				JSONObject data = new JSONObject();
 				data.put("orderId", purchaseOrderBean.getOrderId());
 				data.put("supplierName", supplier.getSupplierName());
@@ -347,6 +341,30 @@ public class ProductInfoAction {
 			job.put("totalRecords", count);
 		}
 		System.out.println(job.toString());
+		return job.toString();
+	}
+
+	@RequestMapping("/upload.do")
+	@ResponseBody
+	public String upload(FileUploadBean filebean, HttpServletRequest request) {
+		String fileName = FileSaveUtil.save(filebean, "");
+		ExcelToProductInfoTool tool = new ExcelToProductInfoTool();
+		List<ProductInfoBean> list = tool.convertToProductInfo(fileName);
+		List<ProductInfoBean> tempList = new ArrayList<ProductInfoBean>();
+		for(int i =0;i<list.size();i++){
+			tempList.add(list.get(i));
+			if(i%500==0){
+				//save 500 
+				productInfoMapper.addProductList(tempList);
+				tempList = new ArrayList<ProductInfoBean>();
+			}
+		}
+		if(tempList!=null && tempList.size()>0){
+			//save left
+			productInfoMapper.addProductList(tempList);
+		}
+		JSONObject job =new JSONObject();
+		job.put("success", true);
 		return job.toString();
 	}
 

@@ -27,4 +27,6 @@ public interface ProductInfoMapper {
 	public int updateProductInfoBarCode(ProductInfoBean bean);
 	
 	public ProductInfoBean getProductInfoById(@Param(value="id")long id);
+	
+	public int addProductList(@Param(value="list") List<ProductInfoBean> list);
 }

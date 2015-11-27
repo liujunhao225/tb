@@ -109,4 +109,12 @@
 	<delete id="deleteProductInfo" parameterType="com.oscar.oscar.bean.ProductInfoBean">
 	    delete from tb2_product_info where id= #{id}
 	</delete>
+	<insert id="addProductList" parameterType="java.util.List">
+		INSERT INTO tb2_product_info (product_code,product_id,product_size,product_name,color,bar_code,brand,season,ingrowth,kind) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.productCode},#{item.productId},#{item.productSize},#{item.productName},#{item.color},#{item.barCode},#{item.brand},#{item.season}
+			,#{item.ingrowth},#{item.kind})
+		</foreach>
+	</insert>
 </mapper>
