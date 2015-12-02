@@ -529,6 +529,9 @@ Ext.onReady(function() {
     	        		allowBlank:true
     	        	}
     	        },{
+    	        	text:'条码',
+    	        	dataIndex:'reserverCol1'
+    	        },{
     	        	text:'仓位变更',
     	        	dataIndex:'dsubShid',
     	        	editor:{
@@ -554,6 +557,43 @@ Ext.onReady(function() {
     	            afterPageText: '页,共{0}页',
     	            displayMsg: '第{0} - {1}条记录,共 {2}条记录',
     	            emptyMsg: '没有记录'
+    	        },{
+    	        	xtype:'toolbar',
+    	        	dock:'top',
+    	        	items:['条码',{
+                    	xtype:'textfield',id:'barcode',width:120,
+                    	listeners:{
+                    		'change':function(item,newValue,oldValue,e){
+                    			if(newValue !=null && newValue !=''){
+                    				var existFlag = false;
+                    				cwproductstore.each(function(record) {
+                    				if(record.get('reserverCol1')==newValue){
+	                    				   record.set('reallycount',record.get('reallycount')+1);
+	                    				   //扫描一次更新一次库存 start
+	                    				   Ext.Ajax.request({
+	                                           url: SHSUB_PRODUCT_COUNT_UPDATE_URL,
+	                                           params: {
+	                                           	shSubId: record.get('shSubId'),
+	                                           	count:record.get('reallycount'),
+	                                           	productCode:record.get('productCode')
+	                                           },
+	                                           success: function(response) {
+	                                           },
+	                                           failure: function() {
+	                                           }
+	                                       });
+	                    				   //扫描一次更新一次库存 end
+	                    				   existFlag = true;
+	                    			   }
+	                    			});
+	                    			if(existFlag==false){
+	                    				Ext.Msg.alert("提示信息","仓位没有该商品");
+	                    		}
+	                    		item.reset();	
+	                    	}
+                    	}
+                    }
+                    }],
     	        }
     	        ]
 

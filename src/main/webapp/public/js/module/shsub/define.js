@@ -1,5 +1,4 @@
 //model start
-
 Ext.define('shSub', {
 	extend : 'Ext.data.Model',
 	fields : [ {
@@ -39,9 +38,12 @@ Ext.define("cwproductmodel",{
 		type:'string'
 	},{
 		name:'reallycount',
-		type:'string'
+		type:'int'
 	},{
 		name:'dsubShid',
+		type:'string'
+	},{
+		name:'reserverCol1',
 		type:'string'
 	}
 	]

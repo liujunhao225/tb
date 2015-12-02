@@ -14,6 +14,7 @@ public class ShProductBean {
 	private Integer tempCount;
 	private String state;
 	private Date time;
+	private String reserverCol1;
 
 	public String getProductId() {
 		return productId;
@@ -91,4 +92,14 @@ public class ShProductBean {
 		return MD5Utils.MD5(this.productCode + this.shId + this.shSubId);
 
 	}
+
+	public String getReserverCol1() {
+		return reserverCol1;
+	}
+
+	public void setReserverCol1(String reserverCol1) {
+		this.reserverCol1 = reserverCol1;
+	}
+
+
 }

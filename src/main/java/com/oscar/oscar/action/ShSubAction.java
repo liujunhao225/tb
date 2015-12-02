@@ -219,6 +219,7 @@ public class ShSubAction {
 		json.put("datalist", list);
 		int totalRecords = shProductMapper.getallshproductCount(bean);
 		json.put("totalRecords", totalRecords);
+		System.out.println("list:"+json.toString());
 		return json.toString();
 	}
 
