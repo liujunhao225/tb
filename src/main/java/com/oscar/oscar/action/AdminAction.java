@@ -25,6 +25,8 @@ public class AdminAction {
 
 	private static Logger logger = Logger.getLogger(AdminAction.class);
 
+	
+	
 	@Autowired
 	private UserMapper userMapper;
 
